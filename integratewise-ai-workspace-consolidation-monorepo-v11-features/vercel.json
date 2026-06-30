@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "ignoreCommand": "npx turbo-ignore",
+  "buildCommand": "pnpm turbo build --filter=@integratewise/core-engine...",
+  "outputDirectory": "apps/integratewise-core-engine/.next",
+  "git": {
+    "deploymentEnabled": {
+      "main": true,
+      "staging": true
+    }
+  },
+  "crons": [
+    { "path": "/api/cron/daily-insights", "schedule": "0 9 * * *" },
+    { "path": "/api/cron/spend-insights", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/hourly-insights", "schedule": "0 * * * *" },
+    { "path": "/api/cron/outbox", "schedule": "*/5 * * * *" },
+    { "path": "/api/cron/integrity-check", "schedule": "0 3 * * *" }
+  ],
+  "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET,POST,PUT,DELETE,OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "Content-Type, Authorization, X-Request-Id" }
+      ]
+    }
+  ]
+}

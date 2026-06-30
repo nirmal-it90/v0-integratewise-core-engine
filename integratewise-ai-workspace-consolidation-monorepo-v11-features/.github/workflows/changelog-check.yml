@@ -1,0 +1,175 @@
+# =============================================================================
+# Changelog Check Workflow
+# =============================================================================
+# Validates that CHANGELOG.md is updated for PRs that modify app/package code.
+# 
+# Conditions:
+# - Only runs when apps/** or packages/** files are changed
+# - Skips for docs-only changes
+# - Skips when [skip changelog] label is present
+# - Skips for dependabot/renovate PRs
+# =============================================================================
+
+name: Changelog Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+    paths:
+      - 'apps/**'
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+
+concurrency:
+  group: changelog-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check-skip-conditions:
+    name: Check Skip Conditions
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.check.outputs.should_skip }}
+    steps:
+      - name: Check if changelog check should be skipped
+        id: check
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            
+            // Check for skip label
+            const hasSkipLabel = pr.labels.some(label => 
+              label.name.toLowerCase().includes('skip changelog') ||
+              label.name.toLowerCase().includes('no changelog') ||
+              label.name.toLowerCase() === 'dependencies'
+            );
+            
+            // Check for bot authors
+            const isBotPR = pr.user.login.includes('bot') || 
+              pr.user.login === 'dependabot' ||
+              pr.user.login === 'renovate';
+            
+            // Check if only docs/md files changed
+            const { data: files } = await github.rest.pulls.listFiles({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            
+            const onlyDocs = files.every(file => 
+              file.filename.endsWith('.md') || 
+              file.filename.startsWith('docs/')
+            );
+            
+            const shouldSkip = hasSkipLabel || isBotPR || onlyDocs;
+            
+            console.log(`Skip label: ${hasSkipLabel}`);
+            console.log(`Bot PR: ${isBotPR}`);
+            console.log(`Only docs: ${onlyDocs}`);
+            console.log(`Should skip: ${shouldSkip}`);
+            
+            core.setOutput('should_skip', shouldSkip);
+
+  changelog-check:
+    name: Verify Changelog Updated
+    needs: check-skip-conditions
+    if: needs.check-skip-conditions.outputs.should_skip != 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check CHANGELOG.md was modified
+        id: changelog
+        run: |
+          # Get the base branch
+          BASE_BRANCH="${{ github.base_ref }}"
+          
+          # Check if CHANGELOG.md was modified in this PR
+          CHANGED=$(git diff --name-only origin/$BASE_BRANCH...HEAD | grep -c "^CHANGELOG.md$" || echo "0")
+          
+          if [ "$CHANGED" -eq "0" ]; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "::notice::CHANGELOG.md was updated."
+          fi
+
+      - name: Check for version bumps
+        id: version
+        run: |
+          BASE_BRANCH="${{ github.base_ref }}"
+          
+          # Check if package.json version changed
+          VERSION_CHANGED=$(git diff origin/$BASE_BRANCH...HEAD -- package.json | grep -c '"version"' || echo "0")
+          
+          if [ "$VERSION_CHANGED" -gt "0" ]; then
+            echo "version_changed=true" >> $GITHUB_OUTPUT
+            echo "::notice::Version bump detected - changelog strongly recommended"
+          else
+            echo "version_changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate changelog format
+        if: steps.changelog.outputs.changed == 'true'
+        run: |
+          if [ -f "CHANGELOG.md" ]; then
+            # Check for required sections
+            if ! grep -q "## \[Unreleased\]" CHANGELOG.md; then
+              echo "::warning::Missing [Unreleased] section in CHANGELOG.md"
+            fi
+            
+            echo "::notice::Changelog format looks good."
+          fi
+
+      - name: Report result
+        run: |
+          if [ "${{ steps.changelog.outputs.changed }}" = "true" ]; then
+            echo "✅ Changelog check passed"
+            echo ""
+            echo "## ✅ Changelog Updated" >> $GITHUB_STEP_SUMMARY
+            echo "CHANGELOG.md was modified in this PR." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ Changelog was not updated"
+            echo ""
+            echo "## ⚠️ Changelog Not Updated" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "CHANGELOG.md was not modified in this PR." >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### How to fix:" >> $GITHUB_STEP_SUMMARY
+            echo "1. Add an entry under **[Unreleased]** section describing your changes" >> $GITHUB_STEP_SUMMARY
+            echo "2. Or add the **skip changelog** label if this is a minor/non-user-facing change" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            
+            # Only fail for version bumps
+            if [ "${{ steps.version.outputs.version_changed }}" = "true" ]; then
+              echo "::error::Version bump detected but CHANGELOG.md not updated"
+              exit 1
+            else
+              echo "::warning::Consider updating CHANGELOG.md for user-facing changes"
+            fi
+          fi
+
+  skip-notice:
+    name: Changelog Check Skipped
+    needs: check-skip-conditions
+    if: needs.check-skip-conditions.outputs.should_skip == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notice
+        run: |
+          echo "::notice::Changelog check skipped (bot PR, skip label, or docs-only)"
+          echo "## ⏭️ Changelog Check Skipped" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "This check was skipped due to one of:" >> $GITHUB_STEP_SUMMARY
+          echo "- **skip changelog** or **dependencies** label present" >> $GITHUB_STEP_SUMMARY
+          echo "- PR from a bot (dependabot, renovate)" >> $GITHUB_STEP_SUMMARY
+          echo "- Only documentation files changed" >> $GITHUB_STEP_SUMMARY

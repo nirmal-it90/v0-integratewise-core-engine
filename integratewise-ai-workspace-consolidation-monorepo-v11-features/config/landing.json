@@ -1,0 +1,144 @@
+{
+  "hero": {
+    "headline": "Your tools and AI conversations—finally in one connected place.",
+    "subhead": "IntegrateWise captures your scattered work data and AI chats, organizes them into your Spine, and gives you an IQ Hub where your IQ Clone works one step ahead—turning conversations into clarity, tasks, and outcomes.",
+    "ctaPrimary": { "text": "Get Started", "href": "/auth/signup" },
+    "ctaSecondary": { "text": "Watch Demo", "href": "/demo" },
+    "trustLine": "No heavy setup. Start in minutes. Add integrations when you're ready."
+  },
+  "problem": {
+    "headline": "Work is scattered. AI chats get lost. Context disappears.",
+    "description": "You're using multiple tools, switching tabs all day, and having valuable AI conversations—then losing the outputs the moment the chat ends.",
+    "points": [
+      "Tool data is spread across apps",
+      "AI conversations don't become reusable knowledge",
+      "Decisions are not captured as a system",
+      "You rebuild the same context again and again"
+    ],
+    "solution": "IntegrateWise fixes that with a simple workflow: load → store → think."
+  },
+  "solution": {
+    "headline": "One workflow that makes everything stay connected.",
+    "pillars": [
+      {
+        "title": "One-Click Loader",
+        "description": "Bring in your tool data in seconds—without complex setup.",
+        "points": [
+          "Import or connect sources quickly",
+          "Extract key entities, tasks, and highlights",
+          "Start getting value immediately"
+        ]
+      },
+      {
+        "title": "Spine",
+        "description": "Your central source of truth—where everything stays organized and connected.",
+        "points": [
+          "Store data + conversations in one place",
+          "Keep context linked across accounts, projects, tasks, and notes",
+          "Search across everything instantly"
+        ]
+      },
+      {
+        "title": "Your IQ Hub",
+        "description": "A personal thinking space where AI conversations turn into usable work.",
+        "points": [
+          "Capture and organize your AI thinking",
+          "Convert chats into structured notes, tasks, and decisions",
+          "Reuse insights anytime—without re-prompting"
+        ]
+      }
+    ]
+  },
+  "iqClone": {
+    "headline": "Meet your IQ Clone—your better self, working one step ahead.",
+    "description": "Your IQ Clone doesn't just \"assist.\" It prepares, drafts, summarizes, and connects the dots before you even ask.",
+    "points": [
+      "Turns AI conversations into action plans",
+      "Surfaces next steps and missing context",
+      "Keeps your thinking consistent across weeks and projects",
+      "Learns your operating style inside your workspace"
+    ]
+  },
+  "howItWorks": [
+    { "step": "1", "title": "Load", "desc": "Use One-Click Loader to pull in your work context (files, tools, conversations)." },
+    { "step": "2", "title": "Store", "desc": "Everything gets organized into the Spine, with links back to sources." },
+    { "step": "3", "title": "Think", "desc": "Use your IQ Hub to refine, decide, and execute—powered by your IQ Clone." }
+  ],
+  "outcomes": {
+    "headline": "What you get immediately",
+    "points": [
+      "One place for your tool data + AI conversations",
+      "Searchable memory for everything you've worked on",
+      "Cleaner decisions and faster execution",
+      "Less repeated context, fewer dropped tasks",
+      "A system that compounds over time"
+    ]
+  },
+  "lenses": [
+    {
+      "title": "Business OS",
+      "description": "Run your business in one workspace—CRM, website, marketing, sales, delivery, and knowledge."
+    },
+    {
+      "title": "Customer Success (TAM Lens)",
+      "description": "Track real customer outcomes with technical depth—health score, adoption, usage, renewals, and strategy."
+    },
+    {
+      "title": "Personal / Team Workspace",
+      "description": "Capture your conversations and work context—tasks, notes, thinking, and decisions—without losing anything."
+    }
+  ],
+  "agents": [
+    { "name": "SuccessPilot", "oneLiner": "Health scoring", "href": "/agents/successpilot" },
+    { "name": "ChurnShield", "oneLiner": "Risk detection", "href": "/agents/churnshield" },
+    { "name": "DataSentinel", "oneLiner": "Data quality", "href": "/agents/datasentinel" },
+    { "name": "VaultGuard", "oneLiner": "Compliance", "href": "/agents/vaultguard" },
+    { "name": "ArchitectIQ", "oneLiner": "Integration design", "href": "/agents/architectiq" },
+    { "name": "TemplateForge", "oneLiner": "Workflows", "href": "/agents/templateforge" },
+    { "name": "DealDesk", "oneLiner": "Revenue ops", "href": "/agents/dealdesk" }
+  ],
+  "trust": { "logos": ["TechCorp", "ScaleUp Inc", "CloudFirst", "DataFlow"] },
+  "badges": ["SOC 2 Type II", "99.9% Uptime", "30+ Integrations", "US & EU Regions"],
+  "integrations": {
+    "headline": "Connect what you already use (when you're ready)",
+    "description": "Start without integrations, then connect tools for deeper automation and insights.",
+    "tools": ["Slack", "HubSpot", "Gmail", "Notion", "Sheets", "Webhooks", "and more"]
+  },
+  "security": {
+    "headline": "Your data stays yours",
+    "points": [
+      "You control what connects and what loads",
+      "Clear permissions and visibility",
+      "Delete/export anytime"
+    ]
+  },
+  "faq": [
+    { "q": "Is this another tool I have to maintain?", "a": "No. IntegrateWise is designed to reduce tools—not add overhead." },
+    { "q": "Do I need integrations to start?", "a": "No. Start with One-Click Loader and add integrations later." },
+    { "q": "What makes this different from generic \"AI assistants\"?", "a": "IntegrateWise stores everything in your Spine and turns conversations into reusable work inside your IQ Hub—powered by your IQ Clone." }
+  ],
+  "footer": {
+    "columns": [
+      {
+        "title": "Agents",
+        "links": [
+          "/agents/successpilot",
+          "/agents/churnshield",
+          "/agents/datasentinel",
+          "/agents/dealdesk"
+        ]
+      },
+      {
+        "title": "Services",
+        "links": [
+          "/services/assessments",
+          "/services/implementations",
+          "/services/managed-ops",
+          "/services/mulesoft",
+          "/services/training"
+        ]
+      },
+      { "title": "Company", "links": ["/demo", "/how-it-works", "/security", "/contact"] }
+    ]
+  }
+}

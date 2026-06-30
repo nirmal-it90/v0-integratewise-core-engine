@@ -1,0 +1,67 @@
+# Bitbucket Pipelines for Cherry-Pick Automation
+
+image: atlassian/default-image:latest
+
+pipelines:
+  custom:
+    cherry-pick:
+      - step:
+          name: Cherry-Pick Commits
+          script:
+            - echo "=== Cherry-Pick Workflow ==="
+            - |
+              # Install git if needed
+              apt-get update && apt-get install -y git || true
+            
+            - |
+              # Configure Git
+              git config user.name "Bitbucket Pipelines"
+              git config user.email "pipelines@bitbucket.org"
+            
+            - |
+              # Parse parameters (passed via pipeline variables)
+              SOURCE_BRANCH=${BITBUCKET_SOURCE_BRANCH:-$1}
+              TARGET_BRANCH=${BITBUCKET_TARGET_BRANCH:-$2}
+              COMMITS=${BITBUCKET_COMMITS:-$3}
+              
+              if [ -z "$SOURCE_BRANCH" ] || [ -z "$TARGET_BRANCH" ] || [ -z "$COMMITS" ]; then
+                echo "Usage: Source branch, target branch, and commits are required"
+                exit 1
+              fi
+            
+            - |
+              # Checkout target branch
+              git checkout $TARGET_BRANCH || git checkout -b $TARGET_BRANCH
+              git pull origin $TARGET_BRANCH || true
+            
+            - |
+              # List commits to cherry-pick
+              echo "=== Commits to cherry-pick ==="
+              git log --oneline --graph --decorate $TARGET_BRANCH..$SOURCE_BRANCH || \
+              git log --oneline $SOURCE_BRANCH --not $TARGET_BRANCH || true
+            
+            - |
+              # Cherry-pick commits
+              if [[ "$COMMITS" == *".."* ]]; then
+                # Range format
+                START=$(echo "$COMMITS" | cut -d'.' -f1)
+                END=$(echo "$COMMITS" | cut -d'.' -f3)
+                git cherry-pick ${START}^..${END} || {
+                  echo "❌ Cherry-pick failed. Resolve conflicts and run: git cherry-pick --continue"
+                  exit 1
+                }
+              else
+                # Comma-separated or single
+                IFS=',' read -ra COMMIT_ARRAY <<< "$COMMITS"
+                for commit in "${COMMIT_ARRAY[@]}"; do
+                  commit=$(echo "$commit" | xargs)
+                  git cherry-pick "$commit" || {
+                    echo "❌ Cherry-pick failed for $commit"
+                    exit 1
+                  }
+                done
+              fi
+            
+            - |
+              # Push to target branch
+              git push origin $TARGET_BRANCH

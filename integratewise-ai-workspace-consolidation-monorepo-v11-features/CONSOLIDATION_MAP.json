@@ -1,0 +1,646 @@
+{
+  "repoMap": {
+    "packageManager": "pnpm",
+    "workspaceTool": "turbo",
+    "rootPath": "/Users/nirmal/Github/13.1/integratewise-ai-workspace",
+    "apps": [
+      {
+        "name": "integrationwise-os",
+        "path": "apps/integrationwise-os",
+        "purpose": "PRIMARY - Main OS application",
+        "techStack": ["Next.js 16", "React 19", "TypeScript"],
+        "mainEntry": "app/page.tsx",
+        "status": "KEEP"
+      },
+      {
+        "name": "hub-frontend-app",
+        "path": "apps/hub-frontend-app",
+        "purpose": "Hub frontend (minimal)",
+        "techStack": ["Next.js", "TypeScript"],
+        "mainEntry": "src/app/page.tsx",
+        "status": "REVIEW"
+      },
+      {
+        "name": "integratewise-core-engine",
+        "path": "apps/integratewise-core-engine",
+        "purpose": "Core engine service",
+        "techStack": ["Node.js", "TypeScript"],
+        "mainEntry": "src/server.ts",
+        "status": "KEEP"
+      },
+      {
+        "name": "integratewise-webhooks",
+        "path": "apps/integratewise-webhooks",
+        "purpose": "Webhook workers (Cloudflare)",
+        "techStack": ["Hono", "TypeScript"],
+        "mainEntry": "src/index.ts",
+        "status": "KEEP"
+      }
+    ],
+    "packages": [
+      {
+        "name": "@integratewise/types",
+        "path": "packages/types",
+        "purpose": "Shared TypeScript types & Zod schemas",
+        "status": "KEEP"
+      },
+      {
+        "name": "@integratewise/ui",
+        "path": "packages/ui",
+        "purpose": "Shared UI components",
+        "status": "KEEP"
+      },
+      {
+        "name": "@integratewise/lib",
+        "path": "packages/lib",
+        "purpose": "Shared utilities",
+        "status": "KEEP"
+      },
+      {
+        "name": "@integratewise/config",
+        "path": "packages/config",
+        "purpose": "Runtime config & feature flags",
+        "status": "KEEP"
+      }
+    ],
+    "sharedUISystem": {
+      "location": "apps/integrationwise-os/components/ui/",
+      "framework": "shadcn + Radix UI",
+      "styling": "Tailwind CSS 4.1.9"
+    }
+  },
+  "routingInventory": {
+    "framework": "Next.js App Router",
+    "routeGroups": [
+      {
+        "group": "(app)",
+        "layout": "app/(app)/layout.tsx",
+        "purpose": "Core app shell",
+        "status": "KEEP"
+      },
+      {
+        "group": "(auth)",
+        "layout": "app/(auth)/layout.tsx",
+        "purpose": "Auth pages",
+        "status": "KEEP"
+      },
+      {
+        "group": "(personal)",
+        "layout": "app/(personal)/layout.tsx",
+        "purpose": "Personal lens",
+        "status": "KEEP"
+      },
+      {
+        "group": "(business)",
+        "layout": "app/(business)/layout.tsx",
+        "purpose": "Business lens",
+        "status": "KEEP"
+      },
+      {
+        "group": "(cs)",
+        "layout": "app/(cs)/layout.tsx",
+        "purpose": "CS lens",
+        "status": "KEEP"
+      }
+    ],
+    "publicRoutes": [
+      "/",
+      "/login",
+      "/signup",
+      "/pricing",
+      "/onboarding",
+      "/os",
+      "/cs"
+    ],
+    "protectedRoutes": [
+      "/dashboard",
+      "/home",
+      "/today",
+      "/goals",
+      "/knowledge",
+      "/loader",
+      "/tasks",
+      "/brainstorming",
+      "/insights",
+      "/settings",
+      "/clients",
+      "/deals",
+      "/leads",
+      "/pipeline",
+      "/sales",
+      "/campaigns",
+      "/content",
+      "/projects",
+      "/sessions",
+      "/products",
+      "/services",
+      "/strategy",
+      "/metrics",
+      "/website",
+      "/spend",
+      "/tam",
+      "/accounts",
+      "/war-room",
+      "/risks",
+      "/browser-read"
+    ],
+    "layoutShells": [
+      {
+        "component": "AppShell",
+        "file": "components/app-shell.tsx",
+        "status": "KEEP"
+      },
+      {
+        "component": "Sidebar",
+        "file": "components/sidebar.tsx",
+        "status": "DEPRECATE"
+      },
+      {
+        "component": "SidebarSSOT",
+        "file": "components/sidebar-ssot.tsx",
+        "status": "MERGE"
+      },
+      {
+        "component": "SidebarMailerLite",
+        "file": "components/sidebar-mailerlite.tsx",
+        "status": "KEEP"
+      },
+      {
+        "component": "PersonalSidebar",
+        "file": "components/sidebars/personal-sidebar.tsx",
+        "status": "KEEP"
+      },
+      {
+        "component": "BusinessSidebar",
+        "file": "components/sidebars/business-sidebar.tsx",
+        "status": "KEEP"
+      },
+      {
+        "component": "CSSidebar",
+        "file": "components/sidebars/cs-sidebar.tsx",
+        "status": "KEEP"
+      }
+    ]
+  },
+  "authInventory": {
+    "oauthProviders": ["google", "azure"],
+    "emailPassword": true,
+    "magicLink": false,
+    "sessionModel": "JWT in HTTP-only cookies (Supabase)",
+    "sessionFiles": [
+      {
+        "file": "lib/supabase/client.ts",
+        "purpose": "Browser client",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/supabase/server.ts",
+        "purpose": "Server client",
+        "status": "KEEP"
+      }
+    ],
+    "loginRoute": "app/(auth)/login/page.tsx",
+    "signupRoute": "app/(auth)/signup/page.tsx",
+    "forgotPasswordRoute": "app/auth/forgot-password/page.tsx",
+    "resetPasswordRoute": "app/auth/reset-password/page.tsx",
+    "authCallback": "app/auth/callback/route.ts",
+    "middlewareFiles": [
+      {
+        "file": "middleware.ts",
+        "purpose": "Next.js middleware entry",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/supabase/middleware.ts",
+        "purpose": "Active session check",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/supabase/proxy.ts",
+        "purpose": "UNUSED - Auto-sets demo mode",
+        "status": "DEPRECATE"
+      }
+    ],
+    "mockAuth": {
+      "file": "lib/mock-auth.ts",
+      "purpose": "Demo mode",
+      "status": "KEEP"
+    }
+  },
+  "rbacInventory": {
+    "roleDefinitions": [
+      {
+        "file": "lib/feature/capabilities.ts",
+        "roles": ["super_admin", "org_admin", "billing_admin", "ops_manager", "member", "viewer"],
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/types/ssot.ts",
+        "roles": ["owner_admin", "manager", "contributor", "viewer", "external_client"],
+        "status": "MERGE"
+      }
+    ],
+    "permissionChecks": [
+      {
+        "file": "lib/feature/capabilities.ts",
+        "type": "capability-based",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/billing/enforcement.ts",
+        "type": "entitlement-based",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/supabase/middleware.ts",
+        "type": "tier-based route protection",
+        "status": "KEEP"
+      },
+      {
+        "file": "components/app-shell.tsx",
+        "type": "client-side (RISK)",
+        "status": "REVIEW"
+      }
+    ],
+    "inviteFlows": {
+      "status": "MISSING"
+    }
+  },
+  "connectorsInventory": {
+    "connectors": [
+      {
+        "name": "Slack",
+        "file": "lib/loaders/slack.ts",
+        "status": "KEEP"
+      },
+      {
+        "name": "HubSpot",
+        "file": "lib/loaders/hubspot.ts",
+        "status": "KEEP"
+      },
+      {
+        "name": "Notion",
+        "file": "lib/loaders/notion.ts",
+        "status": "KEEP"
+      },
+      {
+        "name": "Gmail",
+        "file": "lib/loaders/gmail.ts",
+        "status": "KEEP"
+      },
+      {
+        "name": "Google Sheets",
+        "file": "lib/loaders/sheets.ts",
+        "status": "KEEP"
+      }
+    ],
+    "configModel": {
+      "table": "integrations",
+      "migration": "20260106_spine.sql",
+      "status": "KEEP"
+    },
+    "oauthScopeHandling": {
+      "location": "Individual loader files",
+      "status": "KEEP"
+    },
+    "healthChecks": {
+      "status": "MISSING"
+    },
+    "syncScheduling": [
+      {
+        "file": "lib/sync/scheduler.ts",
+        "purpose": "Schedule management",
+        "status": "KEEP"
+      },
+      {
+        "file": "app/api/cron/sync-scheduler/route.ts",
+        "purpose": "Cron job",
+        "status": "KEEP"
+      }
+    ],
+    "dataSourceMapping": {
+      "tables": ["spine_tasks", "spine_notes", "spine_conversations", "spine_plans"],
+      "tracking": "source_id + source_type",
+      "status": "KEEP"
+    },
+    "ingestionLogging": {
+      "table": "loader_runs",
+      "migration": "20260106_spine.sql",
+      "status": "KEEP"
+    }
+  },
+  "dataModelInventory": {
+    "canonicalTypes": [
+      {
+        "file": "packages/types/src/spine_contracts.ts",
+        "format": "Zod schemas",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/types/ssot.ts",
+        "format": "TypeScript interfaces",
+        "status": "MERGE"
+      },
+      {
+        "file": "lib/types/spine-types.ts",
+        "format": "Local types",
+        "status": "MERGE"
+      }
+    ],
+    "databaseMigrations": [
+      {
+        "file": "supabase/migrations/20260106_spine.sql",
+        "tables": ["spine_tasks", "spine_notes", "spine_conversations", "spine_plans", "integrations", "loader_runs", "approvals"],
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260110_byot_tables.sql",
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260112_ai_loader_schema.sql",
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260113_billing_audit_enhancements.sql",
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260113_phase3_tables.sql",
+        "tables": ["health_scores", "detected_patterns", "goals", "usage_metrics", "user_activity", "nps_scores"],
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260113_shadow_jobs.sql",
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260113_support_requests.sql",
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260116_enable_pgvector.sql",
+        "status": "KEEP"
+      },
+      {
+        "file": "supabase/migrations/20260116_triage_bot.sql",
+        "status": "KEEP"
+      }
+    ],
+    "spineSSOT": {
+      "tables": ["spine_tasks", "spine_notes", "spine_conversations", "spine_plans"],
+      "types": "packages/types/src/spine_contracts.ts",
+      "status": "KEEP"
+    },
+    "conflictResolution": {
+      "method": "source_id + source_type unique constraint",
+      "file": "lib/ai-loader/identity-mapper.ts",
+      "status": "KEEP"
+    },
+    "searchIndexing": {
+      "extension": "pgvector",
+      "file": "lib/embeddings/service.ts",
+      "status": "KEEP"
+    }
+  },
+  "insightsInventory": {
+    "insightsModules": [
+      {
+        "file": "lib/insights/pattern-detection.ts",
+        "purpose": "Pattern detection engine",
+        "status": "KEEP"
+      },
+      {
+        "file": "app/(app)/insights/page.tsx",
+        "purpose": "Insights UI",
+        "status": "KEEP"
+      },
+      {
+        "file": "app/api/insights/patterns/route.ts",
+        "purpose": "Pattern detection API",
+        "status": "KEEP"
+      }
+    ],
+    "knowledgeAreas": [
+      {
+        "file": "app/(personal)/knowledge/page.tsx",
+        "purpose": "Knowledge base",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/ai-loader/stage1-creamy.ts",
+        "purpose": "Creamy layer extraction",
+        "status": "KEEP"
+      }
+    ],
+    "citationSystem": {
+      "evidenceRefs": "lib/types/ssot.ts - Insight.evidence_refs",
+      "sourceTracking": "All Spine entities have source_id + source_type",
+      "status": "KEEP"
+    }
+  },
+  "actionsInventory": {
+    "actionProposals": [
+      {
+        "file": "lib/types/ssot.ts",
+        "type": "ActionRequest interface",
+        "status": "KEEP"
+      },
+      {
+        "file": "app/api/brainstorm/execute/route.ts",
+        "type": "Action execution API",
+        "status": "KEEP"
+      }
+    ],
+    "approvalFlows": [
+      {
+        "file": "lib/governance.ts",
+        "purpose": "Approval creation",
+        "status": "KEEP"
+      },
+      {
+        "table": "approvals",
+        "migration": "20260106_spine.sql",
+        "status": "KEEP"
+      }
+    ],
+    "executionMechanisms": [
+      {
+        "file": "lib/outbox.ts",
+        "purpose": "Event queue",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/shadow/shadow-mode.ts",
+        "purpose": "Shadow jobs",
+        "status": "KEEP"
+      },
+      {
+        "file": "app/api/cron/outbox/route.ts",
+        "purpose": "Outbox processor",
+        "status": "KEEP"
+      }
+    ],
+    "queuesWorkers": [
+      {
+        "system": "Outbox Events",
+        "table": "outbox_events",
+        "file": "lib/outbox.ts",
+        "status": "KEEP"
+      },
+      {
+        "system": "Shadow Jobs",
+        "table": "shadow_jobs",
+        "file": "lib/shadow/shadow-mode.ts",
+        "status": "KEEP"
+      },
+      {
+        "system": "Cron Jobs",
+        "location": "app/api/cron/*/route.ts",
+        "status": "KEEP"
+      },
+      {
+        "system": "Webhook Workers",
+        "location": "apps/integratewise-webhooks/",
+        "status": "KEEP"
+      }
+    ]
+  },
+  "governanceAuditInventory": {
+    "policyEngine": [
+      {
+        "file": "lib/governance.ts",
+        "purpose": "General governance (PII, approvals)",
+        "status": "KEEP"
+      },
+      {
+        "file": "lib/ai-loader/governance-engine.ts",
+        "purpose": "Extraction-specific governance",
+        "status": "KEEP"
+      }
+    ],
+    "auditLogs": [
+      {
+        "system": "Billing Audit",
+        "migration": "20260113_billing_audit_enhancements.sql",
+        "status": "KEEP"
+      },
+      {
+        "system": "Loader Runs",
+        "table": "loader_runs",
+        "status": "KEEP"
+      },
+      {
+        "system": "Approvals",
+        "table": "approvals",
+        "status": "KEEP"
+      },
+      {
+        "system": "Outbox Events",
+        "table": "outbox_events",
+        "status": "KEEP"
+      },
+      {
+        "system": "Logger",
+        "file": "lib/logger.ts",
+        "status": "KEEP"
+      }
+    ],
+    "dataAccessRules": {
+      "rls": "Enabled on Spine tables",
+      "classification": "data_class enum",
+      "status": "KEEP"
+    },
+    "sensitiveActions": {
+      "file": "lib/governance.ts",
+      "functions": ["requiresApproval", "redactPII"],
+      "status": "KEEP"
+    }
+  },
+  "notificationsInventory": {
+    "notificationCenter": {
+      "status": "MISSING"
+    },
+    "emailNotifications": {
+      "status": "MISSING"
+    },
+    "slackNotifications": {
+      "status": "MISSING"
+    },
+    "inAppNotifications": {
+      "status": "MISSING"
+    },
+    "dailySummary": [
+      {
+        "file": "app/api/brainstorm/daily-insights/route.ts",
+        "purpose": "Daily insights generation",
+        "status": "KEEP"
+      },
+      {
+        "file": "app/api/cron/daily-insights/route.ts",
+        "purpose": "Daily insights cron",
+        "status": "KEEP"
+      }
+    ]
+  },
+  "duplicates": [
+    {
+      "category": "Sidebars",
+      "items": [
+        "components/sidebar.tsx",
+        "components/sidebar-ssot.tsx"
+      ],
+      "recommendation": "DEPRECATE sidebar.tsx, MERGE into lens-specific sidebars"
+    },
+    {
+      "category": "Auth Middleware",
+      "items": [
+        "lib/supabase/middleware.ts",
+        "lib/supabase/proxy.ts"
+      ],
+      "recommendation": "DELETE proxy.ts (unused, not imported)"
+    },
+    {
+      "category": "Role Systems",
+      "items": [
+        "lib/feature/capabilities.ts",
+        "lib/types/ssot.ts"
+      ],
+      "recommendation": "MERGE into single role system with capability mapping"
+    },
+    {
+      "category": "Type Definitions",
+      "items": [
+        "packages/types/src/spine_contracts.ts",
+        "lib/types/ssot.ts",
+        "lib/types/spine-types.ts"
+      ],
+      "recommendation": "MERGE - Use Zod schemas as source of truth, generate TypeScript types"
+    },
+    {
+      "category": "Governance",
+      "items": [
+        "lib/governance.ts",
+        "lib/ai-loader/governance-engine.ts"
+      ],
+      "recommendation": "KEEP BOTH (different scopes: general vs extraction-specific)"
+    }
+  ],
+  "missing": [
+    {
+      "category": "Notifications",
+      "expected": "Notification center UI, email/Slack delivery system",
+      "status": "MISSING"
+    },
+    {
+      "category": "Invite/Access Requests",
+      "expected": "User invitation flow, access request system",
+      "status": "MISSING"
+    },
+    {
+      "category": "Connection Health Checks",
+      "expected": "Automated health monitoring for connectors",
+      "status": "MISSING"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+name: Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  check_suite:
+    types: [completed]
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    name: Auto-Merge PR
+    steps:
+      - name: Wait for all checks
+        uses: lewagon/wait-on-check-action@v1.3.4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          check-regexp: '.*'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          allowed-conclusions: success,skipped
+
+      - name: Get PR details
+        id: pr
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.issue.number,
+            });
+            return {
+              mergeable: pr.mergeable,
+              draft: pr.draft,
+              labels: pr.labels.map(l => l.name),
+            };
+
+      - name: Check if auto-merge label exists
+        id: check-label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: labels } = await github.rest.issues.listLabelsOnIssue({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            const hasAutoMergeLabel = labels.some(l => l.name === 'auto-merge');
+            core.setOutput('has-label', hasAutoMergeLabel);
+
+      - name: Auto-merge PR
+        if: |
+          steps.check-label.outputs.has-label == 'true' &&
+          steps.pr.outputs.draft == false &&
+          steps.pr.outputs.mergeable == true
+        uses: peter-evans/enable-pull-request-automerge@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: squash

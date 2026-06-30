@@ -1,0 +1,1182 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "IntegrateWise Product Truth Table",
+    "description": "Complete user journey mapping with all 29 stages - the canonical source of truth for product development. References Section X (Schema Discovery), Section Y (Multi-Department Architecture), Section Z (Integration Architecture & System Hardening), and Section Z-A (Authorization & Connection Security).",
+    "version": "1.3.0",
+    "lastUpdated": "2026-01-13",
+    "company": {
+      "name": "IntegrateWise LLP",
+      "location": "Bengaluru, India",
+      "founder": "Nirmal Prince J",
+      "tagline": "Load in one click. Store it in your Spine. Think in your IQ Hub."
+    },
+    "heroFeatures": [
+      {
+        "id": "one-click-loader",
+        "name": "One-Click Loader",
+        "tagline": "One click. Data in. Structure out.",
+        "purpose": "Bring in tool data in seconds without complex setup"
+      },
+      {
+        "id": "spine",
+        "name": "The Spine",
+        "tagline": "One truth. Many views. Always connected.",
+        "purpose": "Central source of truth where everything stays organized and connected"
+      },
+      {
+        "id": "iq-hub",
+        "name": "IQ Hub",
+        "tagline": "Your AI thinking should compound, not evaporate.",
+        "purpose": "Personal thinking space where AI conversations turn into usable work"
+      },
+      {
+        "id": "shadow",
+        "name": "Your Shadow (Brain Agent)",
+        "tagline": "Not an assistant that responds. A Shadow that anticipates.",
+        "purpose": "Proactive AI that works one step ahead"
+      }
+    ],
+    "lenses": [
+      {
+        "id": "personal",
+        "name": "Personal Lens",
+        "targetUser": "Individual, Knowledge Worker",
+        "coreFeatures": ["Today", "Tasks", "Knowledge Hub", "Goals", "IQ Hub", "Shadow"]
+      },
+      {
+        "id": "business",
+        "name": "Business Lens",
+        "targetUser": "Freelancer, Agency, SMB",
+        "coreFeatures": ["Clients", "Pipeline", "Projects", "Sales", "Marketing", "Finance"]
+      },
+      {
+        "id": "cs",
+        "name": "Customer Success Lens",
+        "targetUser": "CSM, TAM, CS Leader",
+        "coreFeatures": ["Command Center", "Accounts 360", "Health", "Risks", "Renewals", "QBR"]
+      }
+    ],
+    "stages": {
+      "userJourney": [
+        {
+          "stageId": "ENTRY-001",
+          "stageName": "Entry / Landing",
+          "stageNumber": 1,
+          "category": "userJourney",
+          "trigger": "User visits integratewise.com",
+          "mustInclude": [
+            "Tagline (Load → Store → Think)",
+            "3 Lenses Preview",
+            "Hero Headline",
+            "Primary CTA (Load in One Click)",
+            "Trust Line",
+            "Problem Statement",
+            "Solution Overview (4 Pillars)"
+          ],
+          "uiComponents": [
+            "Hero Section",
+            "Lens Cards (3)",
+            "Feature Pillars (4)",
+            "CTA Buttons",
+            "Demo Video Embed",
+            "FAQ Accordion",
+            "Footer"
+          ],
+          "connectsTo": ["SIGNUP-002", "DEMO-VIDEO"],
+          "userOutcome": "Understands value prop, chooses to sign up or watch demo",
+          "successMetrics": ["Signup conversion rate", "Time on page"]
+        },
+        {
+          "stageId": "SIGNUP-002",
+          "stageName": "Signup / Login",
+          "stageNumber": 2,
+          "category": "userJourney",
+          "trigger": "User clicks Get Started",
+          "mustInclude": [
+            "Google OAuth",
+            "Microsoft OAuth",
+            "Email/Password",
+            "Workspace Creation",
+            "Zero Friction Start",
+            "Terms Accept"
+          ],
+          "uiComponents": [
+            "Auth Card (centered)",
+            "OAuth Buttons",
+            "Email Form",
+            "Progress Indicator",
+            "Trust Badges"
+          ],
+          "connectsTo": ["PERSONA-003"],
+          "userOutcome": "Account created, workspace initialized",
+          "successMetrics": ["Signup completion rate", "Drop-off points"]
+        },
+        {
+          "stageId": "PERSONA-003",
+          "stageName": "Persona Reveal",
+          "stageNumber": 3,
+          "category": "userJourney",
+          "trigger": "First login after signup",
+          "mustInclude": [
+            "Persona Insights Questions",
+            "Role Prediction",
+            "Lens Suggestion",
+            "Personalization Defaults",
+            "Skip Option"
+          ],
+          "uiComponents": [
+            "Multi-step Form",
+            "Role Selector",
+            "Industry Selector",
+            "Team Size Input",
+            "AI Suggestion Card",
+            "Progress Bar"
+          ],
+          "dataCollected": ["Role", "Industry", "Team Size", "Primary Use Case", "Tool Stack"],
+          "connectsTo": ["LENS-004"],
+          "userOutcome": "System understands user context, defaults personalized",
+          "successMetrics": ["Completion rate", "Accuracy of predictions"]
+        },
+        {
+          "stageId": "LENS-004",
+          "stageName": "Lens Selection",
+          "stageNumber": 4,
+          "category": "userJourney",
+          "trigger": "After Persona Reveal or manual from settings",
+          "mustInclude": [
+            "Personal Lens Card",
+            "Business Lens Card",
+            "CS Lens Card",
+            "Can Switch Later Notice",
+            "Lens Preview"
+          ],
+          "uiComponents": [
+            "3 Lens Cards (selectable)",
+            "Feature List per Lens",
+            "Preview Screenshots",
+            "Confirm Button"
+          ],
+          "connectsTo": ["SETUP-005"],
+          "userOutcome": "Primary lens selected, UI configured accordingly",
+          "successMetrics": ["Lens distribution", "Switch rate later"]
+        },
+        {
+          "stageId": "SETUP-005",
+          "stageName": "Day 0 Setup Choice",
+          "stageNumber": 5,
+          "category": "userJourney",
+          "trigger": "After Lens Selection",
+          "mustInclude": [
+            "Connect Apps Option",
+            "Data Dump Option",
+            "Skip/Explore Option",
+            "Start Without Integrations Reassurance"
+          ],
+          "uiComponents": [
+            "3 Choice Cards",
+            "App Icons Grid",
+            "File Upload Zone",
+            "Skip Link"
+          ],
+          "setupPaths": [
+            {"path": "Connect", "action": "OAuth flow → One-Click Loader"},
+            {"path": "Dump", "action": "File picker → One-Click Loader"},
+            {"path": "Skip", "action": "Empty state dashboard with guided prompts"}
+          ],
+          "connectsTo": ["BROWSER-006", "LOADER-007", "SPINE-009"],
+          "userOutcome": "Chosen entry path, no pressure to connect immediately",
+          "successMetrics": ["Path distribution", "Time to first value"]
+        },
+        {
+          "stageId": "BROWSER-006",
+          "stageName": "Browser Memory (Optional)",
+          "stageNumber": 6,
+          "category": "userJourney",
+          "trigger": "Optional consent during setup or settings",
+          "mustInclude": [
+            "Explicit Consent Dialog",
+            "History Import",
+            "Bookmarks Import",
+            "Open Tabs Context",
+            "Privacy Controls",
+            "Granular Selection"
+          ],
+          "uiComponents": [
+            "Consent Modal",
+            "Toggle Controls",
+            "Preview of What's Imported",
+            "Privacy Explanation"
+          ],
+          "dataCaptured": ["Browser History (filtered)", "Bookmarks", "Current Tab Context"],
+          "connectsTo": ["IQHUB-008"],
+          "userOutcome": "IQ Hub pre-seeded with browsing context",
+          "successMetrics": ["Consent rate", "Context quality improvement"]
+        },
+        {
+          "stageId": "LOADER-007",
+          "stageName": "One-Click Loader",
+          "stageNumber": 7,
+          "category": "userJourney",
+          "trigger": "User chooses to connect app or dump data",
+          "techSpec": "sectionX",
+          "techSpecNote": "Schema Discovery is CORE - every tool connect auto-triggers schema read, mapping, normalization",
+          "mustInclude": [
+            "App Connect (OAuth)",
+            "Auto Schema Discovery (CORE)",
+            "Data Dump (File Upload)",
+            "Extract Engine",
+            "Normalize Engine",
+            "Schema Mapping UI",
+            "BYOT (Bring Your Own Template)",
+            "Progress Indicator",
+            "Preview Before Commit"
+          ],
+          "uiComponents": [
+            "App Grid",
+            "File Dropzone",
+            "Schema Discovery Progress",
+            "Extraction Preview",
+            "Schema Mapper",
+            "Field Mapping Editor",
+            "Confidence Score Display",
+            "Confirm/Cancel"
+          ],
+          "loaderFlow": [
+            {"step": 1, "name": "Source Selection", "options": ["Apps", "Files", "Paste", "Webhook"]},
+            {"step": 2, "name": "OAuth & Schema Discovery", "shows": ["Auto-read schema", "Entity detection", "Confidence scores"]},
+            {"step": 3, "name": "Mapping Proposal", "features": ["Auto-mapped fields", "Confidence indicators", "Override option"]},
+            {"step": 4, "name": "Normalize & Load", "action": "Transform to Spine, track provenance"},
+            {"step": 5, "name": "BYOT Render", "action": "Customer views data in their preferred format"}
+          ],
+          "connectsTo": ["SPINE-009"],
+          "userOutcome": "Data loaded and normalized in Spine",
+          "successMetrics": ["Load completion rate", "Schema accuracy", "Auto-mapping acceptance rate"]
+        },
+        {
+          "stageId": "IQHUB-008",
+          "stageName": "IQ Hub (Brainstorming Layer)",
+          "stageNumber": 8,
+          "category": "userJourney",
+          "trigger": "User navigates to IQ Hub or captures AI conversation",
+          "mustInclude": [
+            "Browser Memory Context",
+            "Data Dumps",
+            "App Memory",
+            "AI Chat Imports (Claude/ChatGPT/Gemini)",
+            "Slack AI Thread Capture",
+            "Webhook Ingestion",
+            "IQ Clone Interface",
+            "Conversation-to-Structure Converter"
+          ],
+          "uiComponents": [
+            "Chat Import Panel",
+            "Conversation List",
+            "Structure Extractor",
+            "Linked Entity Viewer",
+            "IQ Clone Chat Interface",
+            "Note/Task/Decision Creator"
+          ],
+          "aiChatSources": [
+            {"source": "Claude", "method": "Export JSON / API"},
+            {"source": "ChatGPT", "method": "Export / Paste"},
+            {"source": "Gemini", "method": "Export / Paste"},
+            {"source": "Perplexity", "method": "Paste"},
+            {"source": "Slack AI", "method": "App Integration"},
+            {"source": "Custom", "method": "Webhook"}
+          ],
+          "extractionTypes": [
+            {"from": "Decisions made", "to": "Decision records in Spine"},
+            {"from": "Tasks identified", "to": "Tasks with context"},
+            {"from": "Frameworks created", "to": "Knowledge Hub entries"},
+            {"from": "Questions answered", "to": "Searchable Q&A"},
+            {"from": "Content drafted", "to": "Reusable templates"}
+          ],
+          "connectsTo": ["SPINE-009", "IQCLONE-010", "TASKS-012"],
+          "userOutcome": "AI thinking captured, structured, and connected",
+          "successMetrics": ["Conversations captured", "Extraction accuracy", "Reuse rate"]
+        },
+        {
+          "stageId": "SPINE-009",
+          "stageName": "Spine (Source of Truth)",
+          "stageNumber": 9,
+          "category": "userJourney",
+          "trigger": "Data loaded via Loader or IQ Hub",
+          "mustInclude": [
+            "SSOT Database",
+            "Canonical Entities",
+            "Linked System (entity relationships)",
+            "Audit Trail",
+            "Provenance Tracking",
+            "Universal Search"
+          ],
+          "canonicalEntities": [
+            {
+              "entity": "Clients/Accounts",
+              "fields": ["id", "name", "industry", "status", "health_score", "created_at", "updated_at", "source"],
+              "relationships": ["has_many: Contacts", "has_many: Projects", "has_many: Notes", "has_many: Interactions"]
+            },
+            {
+              "entity": "Contacts",
+              "fields": ["id", "name", "email", "phone", "role", "client_id"],
+              "relationships": ["belongs_to: Client", "has_many: Interactions"]
+            },
+            {
+              "entity": "Projects",
+              "fields": ["id", "name", "status", "start_date", "end_date", "client_id"],
+              "relationships": ["belongs_to: Client", "has_many: Tasks", "has_many: Notes"]
+            },
+            {
+              "entity": "Tasks",
+              "fields": ["id", "title", "description", "status", "priority", "due_date", "completed_at", "project_id", "assigned_to", "source_type"],
+              "relationships": ["belongs_to: Project", "belongs_to: Client", "linked_to: IQ Hub Conversation"]
+            },
+            {
+              "entity": "Notes",
+              "fields": ["id", "content", "type", "entity_type", "entity_id", "source"],
+              "relationships": ["belongs_to: Any Entity"]
+            },
+            {
+              "entity": "Decisions",
+              "fields": ["id", "title", "description", "outcome", "made_at", "made_by", "iq_hub_conversation_id"],
+              "relationships": ["linked_to: IQ Hub Conversation", "affects: Clients/Projects/Tasks"]
+            },
+            {
+              "entity": "Knowledge",
+              "fields": ["id", "title", "content", "type", "tags", "category"],
+              "relationships": ["linked_to: IQ Hub Conversations"]
+            }
+          ],
+          "uiComponents": [
+            "Entity Browser",
+            "Relationship Graph (optional)",
+            "Search Bar",
+            "Filter Panel",
+            "Detail Views",
+            "Audit Log Viewer"
+          ],
+          "connectsTo": ["All other stages (central hub)"],
+          "userOutcome": "Single place where all data lives, connected and searchable",
+          "successMetrics": ["Data completeness", "Search success rate", "Link density"]
+        },
+        {
+          "stageId": "IQCLONE-010",
+          "stageName": "IQ Clone / Shadow / Brain Agent",
+          "stageNumber": 10,
+          "category": "userJourney",
+          "trigger": "Always running in background, surfaces in IQ Hub and Today view",
+          "mustInclude": [
+            "Summarize Capability",
+            "Extract Tasks",
+            "Draft Content",
+            "Surface Next Steps",
+            "Write-Back to IQ Hub",
+            "Write-Back to Spine",
+            "Pattern Learning",
+            "Proactive Suggestions"
+          ],
+          "capabilities": [
+            {"name": "Summarize", "action": "Distills long conversations/threads", "output": "Summary cards"},
+            {"name": "Extract Tasks", "action": "Identifies action items from any content", "output": "Task records in Spine"},
+            {"name": "Draft", "action": "Creates first drafts based on context", "output": "Editable content"},
+            {"name": "Next Steps", "action": "Predicts what user needs to do next", "output": "Suggestion list"},
+            {"name": "Connect Dots", "action": "Finds relationships user might miss", "output": "Insight cards"},
+            {"name": "Prepare", "action": "Pre-loads context for upcoming work", "output": "Meeting prep, call briefs"},
+            {"name": "Write-Back", "action": "Saves outputs to IQ Hub + Spine", "output": "Persistent records"}
+          ],
+          "proactiveTriggers": [
+            {"trigger": "Calendar event in 1 hour", "action": "Prepares meeting brief"},
+            {"trigger": "Task due tomorrow", "action": "Surfaces relevant context and drafts"},
+            {"trigger": "New data loaded", "action": "Identifies connections to existing entities"},
+            {"trigger": "Pattern detected", "action": "Alerts user to trend or risk"},
+            {"trigger": "IQ Hub conversation ends", "action": "Extracts tasks, decisions, insights"}
+          ],
+          "uiComponents": [
+            "Shadow Card (in Today)",
+            "IQ Clone Chat (in IQ Hub)",
+            "Suggestion Panels",
+            "Draft Previews",
+            "Action Buttons"
+          ],
+          "connectsTo": ["IQHUB-008", "SPINE-009", "TODAY-011", "TASKS-012"],
+          "userOutcome": "AI that works ahead, not just responds",
+          "successMetrics": ["Suggestion acceptance rate", "Time saved", "Proactive action rate"]
+        },
+        {
+          "stageId": "TODAY-011",
+          "stageName": "Today View",
+          "stageNumber": 11,
+          "category": "userJourney",
+          "trigger": "Default landing after onboarding, daily entry point",
+          "mustInclude": [
+            "Calendar Integration",
+            "Daily Focus Section",
+            "AI Insights Cards (from Shadow)",
+            "Priority Tasks",
+            "Meeting Prep",
+            "Quick Actions"
+          ],
+          "uiComponents": [
+            "Day Timeline",
+            "Task List (prioritized)",
+            "Shadow Cards",
+            "Calendar Events",
+            "Focus Mode Toggle"
+          ],
+          "connectsTo": ["IQCLONE-010", "TASKS-012", "CALENDAR"],
+          "userOutcome": "Clear daily priorities, nothing missed",
+          "successMetrics": ["Daily engagement", "Task completion rate"]
+        },
+        {
+          "stageId": "TASKS-012",
+          "stageName": "Tasks",
+          "stageNumber": 12,
+          "category": "userJourney",
+          "trigger": "Navigation or task extraction from IQ Clone",
+          "mustInclude": [
+            "Auto Task Extraction (from IQ Hub)",
+            "Multiple Views (List/Board/Calendar)",
+            "Priorities",
+            "Due Dates",
+            "Linked Context (back to Spine entities)",
+            "Source Attribution"
+          ],
+          "views": [
+            {"name": "List", "bestFor": "Quick scanning, bulk management"},
+            {"name": "Board", "bestFor": "Visual workflow (Kanban)"},
+            {"name": "Calendar", "bestFor": "Time-based planning"},
+            {"name": "By Client", "bestFor": "Client-focused work (Business/CS lens)"},
+            {"name": "By Project", "bestFor": "Project-focused work"}
+          ],
+          "uiComponents": [
+            "Task List",
+            "Kanban Board",
+            "Calendar View",
+            "Filter/Sort Panel",
+            "Quick Add",
+            "Bulk Actions"
+          ],
+          "connectsTo": ["SPINE-009", "IQHUB-008", "TODAY-011"],
+          "userOutcome": "All tasks in one place, context preserved",
+          "successMetrics": ["Task completion rate", "Overdue rate"]
+        },
+        {
+          "stageId": "INSIGHTS-013",
+          "stageName": "AI Insights",
+          "stageNumber": 13,
+          "category": "userJourney",
+          "trigger": "Navigation or Shadow-generated alerts",
+          "mustInclude": [
+            "Pattern Detection",
+            "Alerts & Recommendations",
+            "Action Suggestions",
+            "Daily/Weekly Summary",
+            "Trend Visualization"
+          ],
+          "insightTypes": [
+            {"type": "Pattern", "example": "You've discussed pricing with 4 clients this week"},
+            {"type": "Alert", "example": "Task overdue: Acme proposal"},
+            {"type": "Recommendation", "example": "Based on similar deals, consider offering X"},
+            {"type": "Summary", "example": "This week: 12 tasks completed, 3 decisions made"},
+            {"type": "Trend", "example": "Client health trending down — 3 accounts at risk"}
+          ],
+          "uiComponents": [
+            "Insight Cards",
+            "Alert Banner",
+            "Recommendation List",
+            "Summary Report",
+            "Trend Charts"
+          ],
+          "connectsTo": ["IQCLONE-010", "SPINE-009", "METRICS-016"],
+          "userOutcome": "Proactive awareness, not reactive discovery",
+          "successMetrics": ["Insight action rate", "Alert relevance"]
+        },
+        {
+          "stageId": "KNOWLEDGE-014",
+          "stageName": "Knowledge Hub",
+          "stageNumber": 14,
+          "category": "userJourney",
+          "trigger": "Navigation or saving from IQ Hub",
+          "mustInclude": [
+            "Saved Notes",
+            "Documents",
+            "Structured Knowledge (Frameworks, Templates)",
+            "Universal Search",
+            "Reuse Library",
+            "Tags & Categories"
+          ],
+          "knowledgeTypes": [
+            {"type": "Note", "description": "Freeform captured content", "example": "Meeting notes, ideas"},
+            {"type": "Framework", "description": "Structured thinking model", "example": "Pricing framework, decision matrix"},
+            {"type": "Template", "description": "Reusable content structure", "example": "Proposal template, email template"},
+            {"type": "Reference", "description": "External knowledge saved", "example": "Articles, documentation"},
+            {"type": "Decision", "description": "Recorded decision with context", "example": "We chose X because Y"}
+          ],
+          "uiComponents": [
+            "Knowledge Browser",
+            "Search",
+            "Category Filter",
+            "Tag Cloud",
+            "Quick Save",
+            "Template Picker"
+          ],
+          "connectsTo": ["IQHUB-008", "SPINE-009"],
+          "userOutcome": "Institutional knowledge preserved and findable",
+          "successMetrics": ["Knowledge reuse rate", "Search success"]
+        },
+        {
+          "stageId": "GOALS-015",
+          "stageName": "Goals & Milestones",
+          "stageNumber": 15,
+          "category": "userJourney",
+          "trigger": "Navigation or goal creation",
+          "mustInclude": [
+            "Target Setting",
+            "Progress Tracking",
+            "Plans & Milestones",
+            "Score Impact Visualization",
+            "Goal-Task Linking"
+          ],
+          "uiComponents": [
+            "Goal Cards",
+            "Progress Bars",
+            "Milestone Timeline",
+            "Score Calculator",
+            "Task Linker"
+          ],
+          "connectsTo": ["TASKS-012", "METRICS-016"],
+          "userOutcome": "Clear objectives with tracked progress",
+          "successMetrics": ["Goal completion rate", "Progress velocity"]
+        },
+        {
+          "stageId": "METRICS-016",
+          "stageName": "Metrics Dashboard",
+          "stageNumber": 16,
+          "category": "userJourney",
+          "trigger": "Navigation",
+          "mustInclude": [
+            "Lens-Specific KPIs",
+            "Trend Visualization",
+            "Health Score (0-100)",
+            "Drilldown Capability",
+            "Summary Cards"
+          ],
+          "lensMetrics": {
+            "personal": ["Tasks completed", "Goals progress", "Knowledge growth"],
+            "business": ["Revenue", "Pipeline value", "Client count", "Project status"],
+            "cs": ["Health score avg", "At-risk accounts", "NRR", "Renewals"]
+          },
+          "uiComponents": [
+            "KPI Cards",
+            "Charts (line, bar, gauge)",
+            "Score Display",
+            "Filter by Date/Entity",
+            "Export"
+          ],
+          "connectsTo": ["SPINE-009", "GOALS-015", "INSIGHTS-013"],
+          "userOutcome": "At-a-glance performance visibility",
+          "successMetrics": ["Dashboard engagement", "Insight generation"]
+        },
+        {
+          "stageId": "INTEGRATIONS-017",
+          "stageName": "Integrations / Data Sources",
+          "stageNumber": 17,
+          "category": "userJourney",
+          "trigger": "Navigation or setup",
+          "mustInclude": [
+            "Connector Library (all supported apps)",
+            "Slack App",
+            "Webhook Configuration",
+            "Sync Logs & Status",
+            "Connection Health"
+          ],
+          "supportedIntegrations": {
+            "productivity": ["Notion", "Google Sheets", "Airtable", "Coda"],
+            "crm": ["HubSpot", "Salesforce", "Pipedrive"],
+            "communication": ["Slack", "Gmail", "Outlook"],
+            "storage": ["Google Drive", "Dropbox"],
+            "ai": ["Claude", "ChatGPT", "Gemini"],
+            "custom": ["Webhooks", "API"]
+          },
+          "uiComponents": [
+            "App Grid",
+            "OAuth Flow",
+            "Webhook Builder",
+            "Sync Log Viewer",
+            "Status Indicators"
+          ],
+          "connectsTo": ["LOADER-007", "SPINE-009"],
+          "userOutcome": "Connected ecosystem, visible sync status",
+          "successMetrics": ["Connected apps count", "Sync success rate"]
+        },
+        {
+          "stageId": "BUSINESS-018",
+          "stageName": "Business Hub (Business Lens)",
+          "stageNumber": 18,
+          "category": "userJourney",
+          "trigger": "Business Lens selected",
+          "lensRequired": "business",
+          "techSpec": "sectionY",
+          "techSpecNote": "Multi-Department Architecture - Sales/Finance see ARR/pipeline/billing, not CS health scores",
+          "mustInclude": [
+            "Clients/Accounts View",
+            "CRM/Pipeline",
+            "Sales Tracking",
+            "Delivery/Projects",
+            "Marketing Overview",
+            "Finance/Invoicing",
+            "Website Management",
+            "Department-Filtered Fields"
+          ],
+          "departmentContexts": {
+            "SALES": {
+              "visibleFields": ["arr", "mrr", "expansion_pipeline", "deal_stage", "competitors"],
+              "editableFields": ["deal_stage", "expansion_pipeline", "sales_owner"],
+              "hiddenFields": ["billing_address", "tax_id", "csm_notes"],
+              "keyMetrics": ["arr", "expansion_pipeline", "net_revenue_retention"]
+            },
+            "FINANCE": {
+              "visibleFields": ["billing_address", "tax_id", "payment_terms", "outstanding_balance"],
+              "editableFields": ["billing_contact", "payment_method", "collection_status"],
+              "hiddenFields": ["health_score", "csm_notes", "competitors"],
+              "keyMetrics": ["outstanding_balance", "days_sales_outstanding", "revenue_recognized"]
+            }
+          },
+          "sections": [
+            {"name": "Clients", "purpose": "All client/account records (department-filtered view)"},
+            {"name": "Pipeline", "purpose": "Deal tracking and forecasting (Sales dept)"},
+            {"name": "Projects", "purpose": "Delivery and project management"},
+            {"name": "Sales", "purpose": "Revenue and conversion metrics"},
+            {"name": "Marketing", "purpose": "Campaign tracking"},
+            {"name": "Finance", "purpose": "Invoicing and payments (Finance dept)"}
+          ],
+          "uiComponents": [
+            "Client List (Department-Filtered)",
+            "Pipeline Board",
+            "Project Tracker",
+            "Revenue Dashboard",
+            "Marketing Metrics",
+            "Department Switcher"
+          ],
+          "connectsTo": ["SPINE-009", "METRICS-016"],
+          "userOutcome": "Complete business operations with role-appropriate data",
+          "successMetrics": ["Revenue tracked", "Pipeline accuracy"]
+        },
+        {
+          "stageId": "CS-019",
+          "stageName": "Customer Success Hub (CS Lens)",
+          "stageNumber": 19,
+          "category": "userJourney",
+          "trigger": "CS Lens selected",
+          "lensRequired": "cs",
+          "techSpec": "sectionY",
+          "techSpecNote": "Multi-Department Architecture - CS sees health/adoption/renewal fields, not billing/tax fields",
+          "mustInclude": [
+            "Command Center",
+            "Accounts 360 View",
+            "Health Scoring",
+            "Risk Tracking",
+            "Renewal Management",
+            "Engagement Metrics",
+            "QBR Preparation",
+            "Department-Filtered Fields",
+            "CS-Specific Metrics"
+          ],
+          "departmentContext": {
+            "departmentCode": "CS",
+            "visibleFields": ["health_score", "nps_score", "adoption_rate", "renewal_date", "success_plan_status"],
+            "editableFields": ["health_score", "risk_level", "csm_owner", "next_qbr_date"],
+            "hiddenFields": ["billing_address", "tax_id", "payment_terms"],
+            "keyMetrics": ["health_score", "adoption_rate", "time_to_value", "renewal_likelihood"]
+          },
+          "sections": [
+            {"name": "Command Center", "purpose": "At-a-glance portfolio health"},
+            {"name": "Accounts 360", "purpose": "Deep dive into any account (CS-filtered view)"},
+            {"name": "Health", "purpose": "Score calculation and factors"},
+            {"name": "Risks", "purpose": "At-risk accounts and interventions"},
+            {"name": "Renewals", "purpose": "Upcoming renewals and forecasting"},
+            {"name": "Engagement", "purpose": "Activity and touch tracking"},
+            {"name": "QBR", "purpose": "Quarterly review preparation"}
+          ],
+          "uiComponents": [
+            "Command Dashboard",
+            "Account Detail View (Department-Filtered)",
+            "Health Gauge",
+            "Risk List",
+            "Renewal Calendar",
+            "QBR Builder",
+            "Department Switcher (if user in multiple depts)"
+          ],
+          "connectsTo": ["SPINE-009", "METRICS-016", "IQCLONE-010"],
+          "userOutcome": "Proactive customer management with role-appropriate data",
+          "successMetrics": ["Churn rate", "NRR", "Health accuracy"]
+        },
+        {
+          "stageId": "SETTINGS-020",
+          "stageName": "Profile / Settings",
+          "stageNumber": 20,
+          "category": "userJourney",
+          "trigger": "Navigation",
+          "mustInclude": [
+            "Identity Management",
+            "Permissions/RBAC",
+            "Memory Controls (what Shadow learns)",
+            "Integrations Control",
+            "Data Management (export/delete)",
+            "Notification Preferences"
+          ],
+          "sections": [
+            {"name": "Profile", "controls": ["Name", "email", "avatar", "timezone"]},
+            {"name": "Workspace", "controls": ["Name", "team members", "billing"]},
+            {"name": "Permissions", "controls": ["Role", "access level", "team roles"]},
+            {"name": "Memory", "controls": ["What Shadow learns", "reset options"]},
+            {"name": "Integrations", "controls": ["Connected apps", "disconnect"]},
+            {"name": "Data", "controls": ["Export all", "delete account"]},
+            {"name": "Notifications", "controls": ["Email", "in-app", "Shadow alerts"]}
+          ],
+          "uiComponents": [
+            "Profile Form",
+            "Permission Matrix",
+            "Toggle Controls",
+            "Connected Apps List",
+            "Data Export",
+            "Delete Account"
+          ],
+          "connectsTo": ["All stages (configuration)"],
+          "userOutcome": "Full control over account and data",
+          "successMetrics": ["Settings completion", "Data control usage"]
+        }
+      ],
+      "admin": [
+        {
+          "stageId": "USERADMIN-021",
+          "stageName": "Internal User Management",
+          "stageNumber": 21,
+          "category": "admin",
+          "trigger": "Tenant Admin navigates to Team/Users section",
+          "accessLevel": ["Workspace Owner", "Tenant Admin"],
+          "mustInclude": [
+            "User List",
+            "Invite Users",
+            "Role Assignment",
+            "Permission Matrix",
+            "Seat Management",
+            "Activity Logs",
+            "Deactivate/Remove Users"
+          ],
+          "internalUserRoles": [
+            {"role": "Owner", "permissions": "Full access + billing + delete workspace", "useCase": "Founder, primary account holder"},
+            {"role": "Admin", "permissions": "Full access + user management (no billing)", "useCase": "Operations lead, team manager"},
+            {"role": "Manager", "permissions": "Full data access + limited settings", "useCase": "Department head, team lead"},
+            {"role": "Member", "permissions": "Standard access to assigned lens", "useCase": "Regular team member"},
+            {"role": "Viewer", "permissions": "Read-only access", "useCase": "Stakeholder, reviewer"},
+            {"role": "Guest", "permissions": "Limited access to specific entities", "useCase": "External collaborator, client"}
+          ],
+          "uiComponents": [
+            "User Table",
+            "Invite Modal",
+            "Role Dropdown",
+            "Permission Editor",
+            "Activity Timeline",
+            "Bulk Actions"
+          ],
+          "connectsTo": ["SETTINGS-020", "RBAC-022"],
+          "userOutcome": "Full control over workspace team members",
+          "successMetrics": ["Invite completion", "Role accuracy", "Active user ratio"]
+        },
+        {
+          "stageId": "RBAC-022",
+          "stageName": "Role-Based Access Control",
+          "stageNumber": 22,
+          "category": "admin",
+          "trigger": "Admin configures permissions",
+          "accessLevel": ["Owner", "Admin"],
+          "mustInclude": [
+            "Role Definitions",
+            "Permission Matrix",
+            "Entity-Level Access",
+            "Field-Level Access",
+            "Custom Roles",
+            "Access Inheritance"
+          ],
+          "permissionMatrix": {
+            "viewSpineData": {"Owner": "All", "Admin": "All", "Manager": "All", "Member": "Assigned", "Viewer": "Assigned", "Guest": "Specific"},
+            "editSpineData": {"Owner": true, "Admin": true, "Manager": true, "Member": "Assigned", "Viewer": false, "Guest": false},
+            "deleteSpineData": {"Owner": true, "Admin": true, "Manager": "Limited", "Member": false, "Viewer": false, "Guest": false},
+            "accessIQHub": {"Owner": true, "Admin": true, "Manager": true, "Member": "Own", "Viewer": false, "Guest": false},
+            "viewOthersIQHub": {"Owner": true, "Admin": true, "Manager": "Team", "Member": false, "Viewer": false, "Guest": false},
+            "manageUsers": {"Owner": true, "Admin": true, "Manager": false, "Member": false, "Viewer": false, "Guest": false},
+            "manageIntegrations": {"Owner": true, "Admin": true, "Manager": false, "Member": false, "Viewer": false, "Guest": false},
+            "accessBilling": {"Owner": true, "Admin": false, "Manager": false, "Member": false, "Viewer": false, "Guest": false},
+            "exportData": {"Owner": true, "Admin": true, "Manager": true, "Member": "Own", "Viewer": false, "Guest": false},
+            "deleteWorkspace": {"Owner": true, "Admin": false, "Manager": false, "Member": false, "Viewer": false, "Guest": false}
+          },
+          "uiComponents": [
+            "Role Editor",
+            "Permission Grid",
+            "Entity Selector",
+            "Field Toggles",
+            "Inheritance Diagram"
+          ],
+          "connectsTo": ["USERADMIN-021", "SPINE-009"],
+          "userOutcome": "Granular control over who sees what",
+          "successMetrics": ["Permission accuracy", "Access violations (should be 0)"]
+        },
+        {
+          "stageId": "BILLING-023",
+          "stageName": "Workspace Billing",
+          "stageNumber": 23,
+          "category": "admin",
+          "trigger": "Owner accesses billing section",
+          "accessLevel": ["Owner"],
+          "mustInclude": [
+            "Current Plan",
+            "Seat Usage",
+            "Billing History",
+            "Payment Methods",
+            "Upgrade/Downgrade",
+            "Invoice Download",
+            "Cancel Subscription"
+          ],
+          "pricingTiers": [
+            {"tier": "Free", "priceINR": 0, "seats": 1, "storage": "1 GB", "integrations": 2, "features": "Personal Lens, Basic Loader"},
+            {"tier": "Starter", "priceINR": 499, "seats": 2, "storage": "5 GB", "integrations": 5, "features": "All Lenses, Basic Shadow"},
+            {"tier": "Pro", "priceINR": 1499, "seats": 5, "storage": "10 GB", "integrations": 10, "features": "Full Shadow, All Features"},
+            {"tier": "Team", "priceINR": 3999, "seats": 15, "storage": "50 GB", "integrations": 25, "features": "Team Analytics, Priority Support"},
+            {"tier": "Business", "priceINR": 9999, "seats": 50, "storage": "200 GB", "integrations": "Unlimited", "features": "Custom Schema, Dedicated Support"},
+            {"tier": "Enterprise", "priceINR": "Custom", "seats": "Unlimited", "storage": "Unlimited", "integrations": "Unlimited", "features": "SLA, SSO, Custom Deployment"}
+          ],
+          "uiComponents": [
+            "Plan Card",
+            "Usage Meter",
+            "Invoice Table",
+            "Payment Form",
+            "Plan Comparison"
+          ],
+          "connectsTo": ["USERADMIN-021", "SETTINGS-020"],
+          "userOutcome": "Full billing transparency and control",
+          "successMetrics": ["Payment success rate", "Churn at billing"]
+        },
+        {
+          "stageId": "PLATFORMADMIN-024",
+          "stageName": "Platform Admin Panel",
+          "stageNumber": 24,
+          "category": "admin",
+          "trigger": "IntegrateWise staff login to admin portal",
+          "accessLevel": ["IntegrateWise Super Admin", "Support", "Engineering"],
+          "mustInclude": [
+            "Tenant List",
+            "User Analytics",
+            "Platform Metrics",
+            "Support Tools",
+            "Feature Flags",
+            "System Health",
+            "Audit Logs"
+          ],
+          "platformAdminRoles": [
+            {"role": "Super Admin", "accessLevel": "Full platform access, all tenants, all config", "useCase": "Founders, CTO"},
+            {"role": "Platform Admin", "accessLevel": "Tenant management, no billing access", "useCase": "Operations lead"},
+            {"role": "Support Agent", "accessLevel": "Read-only tenant access, ticket management", "useCase": "Customer support"},
+            {"role": "Engineering", "accessLevel": "System health, logs, feature flags", "useCase": "Dev team"},
+            {"role": "Finance", "accessLevel": "Billing overview, revenue metrics", "useCase": "Finance team"},
+            {"role": "Marketing", "accessLevel": "User analytics, growth metrics", "useCase": "Marketing team"}
+          ],
+          "uiComponents": [
+            "Admin Dashboard",
+            "Tenant Browser",
+            "User Search",
+            "Metrics Charts",
+            "Health Monitor",
+            "Log Viewer"
+          ],
+          "connectsTo": ["All tenant workspaces (read/support access)"],
+          "userOutcome": "Platform-wide visibility and management",
+          "successMetrics": ["Platform uptime", "Support resolution time"]
+        },
+        {
+          "stageId": "TENANTMGMT-025",
+          "stageName": "Tenant Management",
+          "stageNumber": 25,
+          "category": "admin",
+          "trigger": "Platform Admin searches/browses tenants",
+          "accessLevel": ["Platform Admin", "Support Agent (read-only)"],
+          "mustInclude": [
+            "Tenant List",
+            "Search & Filter",
+            "Tenant Detail View",
+            "Usage Metrics",
+            "Billing Status",
+            "Support History",
+            "Impersonation (with audit)",
+            "Suspend/Reactivate"
+          ],
+          "uiComponents": [
+            "Tenant Table",
+            "Search Bar",
+            "Detail Drawer",
+            "Usage Charts",
+            "Action Buttons"
+          ],
+          "connectsTo": ["PLATFORMADMIN-024", "SUPPORT-026"],
+          "userOutcome": "Manage any tenant workspace",
+          "successMetrics": ["Support efficiency", "Tenant health"]
+        },
+        {
+          "stageId": "SUPPORT-026",
+          "stageName": "Support Tools",
+          "stageNumber": 26,
+          "category": "admin",
+          "trigger": "Support ticket or direct tenant lookup",
+          "accessLevel": ["Support Agent", "Platform Admin"],
+          "mustInclude": [
+            "Ticket Queue",
+            "Tenant Lookup",
+            "User Lookup",
+            "Impersonation (audited)",
+            "Issue Templates",
+            "Escalation Path",
+            "Resolution Tracking"
+          ],
+          "uiComponents": [
+            "Ticket List",
+            "Search",
+            "Tenant/User Detail",
+            "Impersonation Modal",
+            "Notes Editor"
+          ],
+          "connectsTo": ["TENANTMGMT-025", "PLATFORMADMIN-024"],
+          "userOutcome": "Efficient customer support",
+          "successMetrics": ["Resolution time", "CSAT score"]
+        },
+        {
+          "stageId": "FEATUREFLAGS-027",
+          "stageName": "Feature Flags",
+          "stageNumber": 27,
+          "category": "admin",
+          "trigger": "Engineering/Admin enables new features",
+          "accessLevel": ["Super Admin", "Engineering"],
+          "mustInclude": [
+            "Flag List",
+            "Toggle Controls",
+            "Rollout Percentage",
+            "Tenant Targeting",
+            "A/B Testing",
+            "Flag History"
+          ],
+          "uiComponents": [
+            "Flag Table",
+            "Toggle Switch",
+            "Percentage Slider",
+            "Tenant Selector",
+            "History Log"
+          ],
+          "connectsTo": ["PLATFORMADMIN-024"],
+          "userOutcome": "Controlled feature rollout",
+          "successMetrics": ["Rollout success", "Incident rate"]
+        },
+        {
+          "stageId": "MONITORING-028",
+          "stageName": "System Health & Monitoring",
+          "stageNumber": 28,
+          "category": "admin",
+          "trigger": "Platform Admin views system status",
+          "accessLevel": ["Super Admin", "Engineering"],
+          "mustInclude": [
+            "Service Status",
+            "Error Rates",
+            "Performance Metrics",
+            "Database Health",
+            "Queue Status",
+            "Alert Configuration",
+            "Incident Log"
+          ],
+          "uiComponents": [
+            "Status Board",
+            "Metric Charts",
+            "Alert Banner",
+            "Incident Timeline"
+          ],
+          "connectsTo": ["PLATFORMADMIN-024"],
+          "userOutcome": "Real-time platform health visibility",
+          "successMetrics": ["Uptime %", "MTTR"]
+        },
+        {
+          "stageId": "AUDIT-029",
+          "stageName": "Audit Logs",
+          "stageNumber": 29,
+          "category": "admin",
+          "trigger": "Admin reviews activity history",
+          "accessLevel": ["Tenant Admin (own workspace)", "Platform Admin (all)"],
+          "mustInclude": [
+            "Action Log",
+            "User Attribution",
+            "Timestamp",
+            "Entity Affected",
+            "Before/After State",
+            "Export Capability",
+            "Search & Filter"
+          ],
+          "uiComponents": [
+            "Log Table",
+            "Filter Panel",
+            "Detail Drawer",
+            "Export Button"
+          ],
+          "connectsTo": ["USERADMIN-021", "PLATFORMADMIN-024", "RBAC-022"],
+          "userOutcome": "Complete audit trail for compliance",
+          "successMetrics": ["Log completeness", "Query performance"]
+        }
+      ]
+    },
+    "quickReferenceDictionary": {
+      "ENTRY-001": ["Tagline", "3 Lenses", "4 Pillars", "Hero", "CTAs"],
+      "SIGNUP-002": ["OAuth (Google/MS)", "Email", "Auto Workspace"],
+      "PERSONA-003": ["Role Questions", "Lens Suggestion", "AI Prediction"],
+      "LENS-004": ["3 Lens Cards", "Feature Preview", "Switch Later"],
+      "SETUP-005": ["Connect", "Dump", "Skip Options"],
+      "BROWSER-006": ["Consent", "History", "Bookmarks", "Tabs", "Granular Control"],
+      "LOADER-007": ["App Connect", "Auto Schema Discovery (CORE)", "File Dump", "Extract", "Normalize", "Schema Map", "BYOT Render", "Confidence Scoring"],
+      "IQHUB-008": ["AI Chat Import", "Structure", "Connect to Spine", "IQ Clone"],
+      "SPINE-009": ["SSOT", "Canonical Entities", "Links", "Audit", "Search"],
+      "IQCLONE-010": ["Summarize", "Extract", "Draft", "Next Steps", "Write-Back"],
+      "TODAY-011": ["Calendar", "Focus", "Shadow Cards", "Priority Tasks"],
+      "TASKS-012": ["Auto Extract", "Views", "Priorities", "Linked Context"],
+      "INSIGHTS-013": ["Patterns", "Alerts", "Recommendations", "Summaries"],
+      "KNOWLEDGE-014": ["Notes", "Frameworks", "Templates", "Search", "Reuse"],
+      "GOALS-015": ["Targets", "Progress", "Milestones", "Score Impact"],
+      "METRICS-016": ["Lens KPIs", "Trends", "Health Score", "Drilldowns"],
+      "INTEGRATIONS-017": ["Connector Library", "Slack", "Webhooks", "Sync Logs"],
+      "BUSINESS-018": ["Clients", "Pipeline", "Projects", "Sales", "Finance", "Department-Filtered", "Sales/Finance Views"],
+      "CS-019": ["Command", "Accounts 360", "Health", "Risks", "Renewals", "Department-Filtered", "CS-Specific Metrics"],
+      "SETTINGS-020": ["Profile", "Permissions", "Memory", "Data", "Notifications"],
+      "USERADMIN-021": ["User List", "Invite", "Roles", "Permissions", "Activity"],
+      "RBAC-022": ["Role Definitions", "Permission Matrix", "Entity Access"],
+      "BILLING-023": ["Plan", "Seats", "Usage", "Invoices", "Payment", "Cancel"],
+      "PLATFORMADMIN-024": ["Tenants", "Users", "Metrics", "Health", "Alerts", "Audit"],
+      "TENANTMGMT-025": ["Tenant List", "Detail", "Usage", "Support History", "Actions"],
+      "SUPPORT-026": ["Tickets", "Lookup", "Impersonation", "Resolution"],
+      "FEATUREFLAGS-027": ["Flags", "Toggles", "Rollout %", "Targeting", "History"],
+      "MONITORING-028": ["Services", "Errors", "Performance", "DB", "Queues", "Incidents"],
+      "AUDIT-029": ["Actions", "Users", "Timestamps", "Changes", "Export"]
+    },
+    "userTypeMatrix": [
+      {"userType": "End User (Member)", "accessLevel": "Own data + assigned entities", "stagesAccessible": "1-20 (limited settings)"},
+      {"userType": "Tenant Admin", "accessLevel": "Full workspace", "stagesAccessible": "1-23, 29 (workspace audit)"},
+      {"userType": "Workspace Owner", "accessLevel": "Full + billing", "stagesAccessible": "1-23, 29"},
+      {"userType": "Support Agent (IW)", "accessLevel": "Read-only + tickets", "stagesAccessible": "24-26, 29"},
+      {"userType": "Platform Admin (IW)", "accessLevel": "All tenants", "stagesAccessible": "24-29"},
+      {"userType": "Engineering (IW)", "accessLevel": "System + flags", "stagesAccessible": "24, 27-29"},
+      {"userType": "Super Admin (IW)", "accessLevel": "Everything", "stagesAccessible": "24-29"}
+    ],
+    "terminology": {
+      "Spine": "Central PostgreSQL database, single source of truth",
+      "IQHub": "Brainstorming layer where AI conversations become structured work",
+      "Shadow": "Proactive Brain Agent that works ahead of user",
+      "IQClone": "Alternate name for Shadow",
+      "OneClickLoader": "Data import and normalization engine",
+      "Lens": "Role-based view of the system (Personal/Business/CS)",
+      "Entity": "Canonical data object (Client, Contact, Task, etc.)",
+      "HubSync": "Bidirectional sync with external tools",
+      "BYOT": "Bring Your Own Template - output rendering layer where customers view Spine data in their preferred formats/layouts",
+      "Canonical": "The normalized, authoritative version of data",
+      "Provenance": "Tracking where data came from",
+      "SchemaDiscovery": "CORE mechanism that auto-reads external tool schemas on connect (not optional)",
+      "Department": "Organizational unit (CS, Sales, Support, Finance, Product) with own field visibility and metrics",
+      "FieldVisibility": "Per-department rules for which fields are visible/editable",
+      "DepartmentContext": "Which department 'hat' a user is wearing when viewing/editing data"
+    },
+    "technicalSpecifications": {
+      "sectionX": {
+        "title": "Tool Connection & Auto Schema Discovery",
+        "file": "integratewise-schema-discovery-spec.md",
+        "description": "Defines auto schema discovery (CORE to every tool connection), mapping algorithms, normalization rules, BYOT rendering, and bidirectional sync",
+        "covers": [
+          "Schema discovery per tool (Notion, Coda, Airtable, Sheets, HubSpot, Salesforce)",
+          "Auto-mapping logic with confidence scoring",
+          "Normalization pipeline (Extract → Clean → Transform → Validate → Enrich → Load)",
+          "Formula and rollup handling strategies",
+          "BYOT (Bring Your Own Template) output rendering",
+          "Provenance tracking",
+          "Database schema additions (SchemaCache, SchemaAnalysis, SchemaMapping, Template)",
+          "API endpoints for discovery and BYOT"
+        ],
+        "keyPrinciple": "Schema Discovery is CORE to every tool connection, not optional. Connect → Auto-Discover → Normalize → BYOT Render."
+      },
+      "sectionY": {
+        "title": "Multi-Department Architecture",
+        "file": "integratewise-multi-department-spec.md",
+        "description": "Defines how same account data serves different departmental views with appropriate field visibility and metrics",
+        "covers": [
+          "Department master table and hierarchy",
+          "User-department membership",
+          "Account-department relationships (ownership, primary flag)",
+          "Schema field visibility per department",
+          "Department-specific metrics and KPIs",
+          "Default configurations for CS, Sales, Support, Finance, Product",
+          "Query patterns with department context",
+          "Department switcher UI",
+          "Cross-department handoff workflow"
+        ],
+        "keyPrinciple": "Same Account, Different Views. Each department sees/edits only what's relevant to their role."
+      },
+      "sectionZA": {
+        "title": "Authorization, Limitations & Connection Security",
+        "file": "integratewise-authorization-security-spec.md",
+        "description": "Defines zero friction boundaries, connection authorization, unauthorized access detection, and multi-account consent framework",
+        "covers": [
+          "Tool capabilities and plan-based limitations",
+          "Zero friction vs verification boundaries",
+          "Connection authorization matrix (self, domain, team, consent)",
+          "Risk assessment signals (domain mismatch, rapid multi-org, consultant detection)",
+          "Risk scoring and automatic blocking",
+          "Consent token system and approval flow",
+          "Multi-account and MSP/consultant patterns",
+          "Team connector access control",
+          "Consent revocation and data handling",
+          "API endpoints for authorization"
+        ],
+        "keyPrinciple": "Zero friction for self-authorized. Consent required for cross-domain. Block and verify for high-risk patterns."
+      },
+      "sectionZ": {
+        "title": "Integration Architecture, Sync Patterns & System Hardening",
+        "file": "integratewise-integration-hardening-spec.md",
+        "description": "Comprehensive integration architecture, event-driven patterns, reliability hardening, and implementation gap analysis",
+        "covers": [
+          "PART 1: Data Ownership Model (Personal/Team/Workspace scope)",
+          "PART 1: User Relationship Architecture (Owner, Assignee, Reporter, Watcher, CSM, TAM)",
+          "PART 1: User Resolution & Placeholder Users",
+          "PART 2: Connector Tiers (Tier 1-5: OAuth+Webhooks to File/Manual)",
+          "PART 2: Tool Rate Limits & Governance (SF, HubSpot, Notion, Airtable, etc.)",
+          "PART 2: Sync Strategies (Initial Full, Incremental, Real-time Webhook)",
+          "PART 3: Event-Driven Architecture (Pub/Sub with Event Log)",
+          "PART 3: Event Taxonomy (topics, payloads, partition keys, semantics)",
+          "PART 3: Bulk Operations Architecture (Pub/Sub pattern)",
+          "PART 4: Retry + Backoff Policy Table (by dependency type)",
+          "PART 4: Caching & Pagination Policy (Cache-Aside, cursor-based)",
+          "PART 4: External Logging & Observability (correlation IDs, structured logs)",
+          "PART 4: SLIs/SLOs and Alert Thresholds",
+          "PART 4: AI Loader Hardening (edge cases, pipeline phases, resource limits)",
+          "PART 4: File Aging & Cleanup (TTLs, lifecycle rules)",
+          "PART 4: System Muting During Upgrade (per-module maintenance)",
+          "PART 5: Gap Analysis Tables (Stage implementation status)",
+          "PART 5: Must Include Items Status per Stage",
+          "PART 5: Technical Debt Tracker"
+        ],
+        "keyPrinciple": "Events drive everything. Pub/Sub for bulk ops. At-least-once with idempotency. Retry with exponential backoff + jitter."
+      }
+    },
+    "stageToSpecMapping": {
+      "LOADER-007": ["sectionX", "sectionZ"],
+      "SPINE-009": ["sectionX", "sectionY", "sectionZ"],
+      "CS-019": ["sectionY", "sectionZ"],
+      "BUSINESS-018": ["sectionY", "sectionZ"],
+      "RBAC-022": ["sectionY", "sectionZA"],
+      "INTEGRATIONS-017": ["sectionX", "sectionZ", "sectionZA"],
+      "IQHUB-008": ["sectionZ"],
+      "IQCLONE-010": ["sectionZ"],
+      "MONITORING-028": ["sectionZ"],
+      "AUDIT-029": ["sectionZ", "sectionZA"],
+      "SIGNUP-002": ["sectionZA"],
+      "SETTINGS-020": ["sectionZA"],
+      "USERADMIN-021": ["sectionZA"]
+    }
+  }

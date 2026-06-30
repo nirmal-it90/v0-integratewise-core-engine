@@ -1,0 +1,361 @@
+# =============================================================================
+# CI Workflow - IntegrateWise Mono-Repo
+# =============================================================================
+# Optimized CI pipeline with:
+# - Path filtering (skips docs-only changes)
+# - Concurrency control (cancels in-progress runs)
+# - Shared pnpm cache
+# - Turbo-based incremental builds
+# - Required checks: typecheck, lint, test, build
+# - Optional checks: lighthouse, a11y (non-blocking)
+#
+# Triggers: push to main, pull_request to any branch
+# =============================================================================
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/PULL_REQUEST_TEMPLATE/**'
+      - '.editorconfig'
+      - '.prettierrc'
+      - '.prettierignore'
+      - 'LICENSE'
+  pull_request:
+    branches: ['*']
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '.github/ISSUE_TEMPLATE/**'
+      - '.github/PULL_REQUEST_TEMPLATE/**'
+      - '.editorconfig'
+      - '.prettierrc'
+      - '.prettierignore'
+      - 'LICENSE'
+  workflow_dispatch:
+    inputs:
+      skip_cache:
+        description: 'Skip pnpm cache'
+        required: false
+        default: false
+        type: boolean
+
+# Cancel in-progress runs for the same ref
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Minimum permissions needed
+permissions:
+  contents: read
+  id-token: write
+  packages: read
+
+env:
+  NODE_VERSION: '20'
+  TURBO_TELEMETRY_DISABLED: 1
+  NEXT_TELEMETRY_DISABLED: 1
+
+jobs:
+  # ===========================================================================
+  # Setup: Install dependencies and cache them
+  # ===========================================================================
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache-key.outputs.key }}
+      pnpm-store-path: ${{ steps.pnpm-store.outputs.path }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Get pnpm store directory
+        id: pnpm-store
+        shell: bash
+        run: |
+          echo "path=$(pnpm store path --silent)" >> $GITHUB_OUTPUT
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          echo "key=pnpm-${{ runner.os }}-${{ env.NODE_VERSION }}-${{ hashFiles('pnpm-lock.yaml') }}" >> $GITHUB_OUTPUT
+
+      - name: Restore pnpm cache
+        if: inputs.skip_cache != true
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ steps.pnpm-store.outputs.path }}
+            node_modules
+            **/node_modules
+          key: ${{ steps.cache-key.outputs.key }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-${{ env.NODE_VERSION }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Save pnpm cache
+        if: inputs.skip_cache != true
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            ${{ steps.pnpm-store.outputs.path }}
+            node_modules
+            **/node_modules
+          key: ${{ steps.cache-key.outputs.key }}
+
+  # ===========================================================================
+  # Lint: ESLint checks
+  # ===========================================================================
+  lint:
+    name: Lint
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore pnpm cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.local/share/pnpm/store
+            node_modules
+            **/node_modules
+          key: ${{ needs.setup.outputs.cache-key }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-${{ env.NODE_VERSION }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run lint
+        run: pnpm lint
+
+  # ===========================================================================
+  # Typecheck: TypeScript type checking
+  # ===========================================================================
+  typecheck:
+    name: Type Check
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore pnpm cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.local/share/pnpm/store
+            node_modules
+            **/node_modules
+          key: ${{ needs.setup.outputs.cache-key }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-${{ env.NODE_VERSION }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run type check
+        run: pnpm typecheck
+
+  # ===========================================================================
+  # Test: Unit and integration tests
+  # ===========================================================================
+  test:
+    name: Test
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore pnpm cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.local/share/pnpm/store
+            node_modules
+            **/node_modules
+          key: ${{ needs.setup.outputs.cache-key }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-${{ env.NODE_VERSION }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests
+        run: pnpm test
+        env:
+          # Provide placeholder values for test env vars
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost/test'
+          NEXTAUTH_SECRET: 'test-secret-for-ci-only'
+          NEXTAUTH_URL: 'http://localhost:3000'
+
+  # ===========================================================================
+  # Build: Production build
+  # ===========================================================================
+  build:
+    name: Build
+    needs: [lint, typecheck]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Restore pnpm cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            ~/.local/share/pnpm/store
+            node_modules
+            **/node_modules
+          key: ${{ needs.setup.outputs.cache-key }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-${{ env.NODE_VERSION }}-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build packages and apps
+        run: pnpm build
+        env:
+          # Provide placeholder values for build-time env vars
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key' }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL || 'postgresql://placeholder:placeholder@localhost/db' }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'placeholder-secret-for-build' }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL || 'https://placeholder.integratewise.ai' }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts-${{ github.sha }}
+          path: |
+            apps/*/.next
+            apps/*/dist
+            packages/*/dist
+          retention-days: 1
+          if-no-files-found: ignore
+
+  # ===========================================================================
+  # CI Success Gate: Summary job for branch protection
+  # ===========================================================================
+  ci-success:
+    name: CI Success
+    needs: [lint, typecheck, test, build]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required jobs
+        run: |
+          echo "## CI Results Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Lint | ${{ needs.lint.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Type Check | ${{ needs.typecheck.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test | ${{ needs.test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          
+          # Check required jobs
+          FAILED=false
+          
+          if [ "${{ needs.lint.result }}" != "success" ]; then
+            echo "::error::Lint check failed"
+            FAILED=true
+          fi
+          
+          if [ "${{ needs.typecheck.result }}" != "success" ]; then
+            echo "::error::Type check failed"
+            FAILED=true
+          fi
+          
+          if [ "${{ needs.build.result }}" != "success" ]; then
+            echo "::error::Build failed"
+            FAILED=true
+          fi
+          
+          # Test is required but we warn if it fails
+          if [ "${{ needs.test.result }}" == "failure" ]; then
+            echo "::error::Tests failed"
+            FAILED=true
+          fi
+          
+          if [ "$FAILED" = true ]; then
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "❌ **CI Failed** - One or more required checks did not pass" >> $GITHUB_STEP_SUMMARY
+            exit 1
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ **All CI checks passed!**" >> $GITHUB_STEP_SUMMARY
+
+  # ===========================================================================
+  # Optional: Lighthouse Performance Audit (non-blocking)
+  # ===========================================================================
+  lighthouse:
+    name: Lighthouse Audit
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Skip notice
+        run: |
+          echo "::notice::Lighthouse audit skipped - enable when Vercel preview URL is available"
+          echo "To enable: Configure VERCEL_PREVIEW_URL or use Vercel deployment integration"

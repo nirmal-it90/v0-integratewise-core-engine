@@ -1,0 +1,1229 @@
+{
+  "version": "11.0",
+  "date": "2026-01-20",
+  "status": "IMPLEMENTATION_READY",
+  "repository": "integratewise-ai-workspace",
+  "branch": "consolidation/monorepo-v11-features",
+
+  "summary": {
+    "total_items": 202,
+    "sql_migrations": 17,
+    "api_routes_new": 42,
+    "components_new": 38,
+    "library_files_new": 52,
+    "n8n_workflows": 37,
+    "views_to_merge": 16
+  },
+
+  "engine_layers": {
+    "LOAD": {
+      "name": "Loader Module",
+      "purpose": "First-class intake + triage + routing control plane",
+      "package": "@integratewise/loader",
+      "location": "apps/integrationwise-os/lib/ai-loader/",
+      "views": [
+        "/loader",
+        "/ai-loader",
+        "/onboarding/load-data"
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/app/api/loader/upload/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "File upload endpoint accepting multipart form data"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/loader/status/[jobId]/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "Job status polling endpoint"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "Parser registry and selector"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/pdf-parser.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "PDF to text extraction using pdf-parse"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/docx-parser.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "DOCX parsing using mammoth"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/xlsx-parser.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "Excel parsing using xlsx"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/csv-parser.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "CSV parsing using papaparse"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/json-parser.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "JSON parsing and validation"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/email-parser.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW",
+          "description": "Email parsing for EML/MSG"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/parsers/zip-extractor.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW",
+          "description": "ZIP file extraction"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/entity-extractor.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "LLM-powered entity extraction from raw text"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/ai-loader/stage2-full.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "UPGRADE",
+          "description": "Complete Stage 2 background processing"
+        },
+        {
+          "path": "apps/integrationwise-os/components/loader/file-upload-zone.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "Drag-drop file upload component"
+        },
+        {
+          "path": "apps/integrationwise-os/components/loader/processing-status.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "Processing status indicator"
+        },
+        {
+          "path": "apps/integrationwise-os/components/loader/preview-panel.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW",
+          "description": "Creamy preview panel"
+        },
+        {
+          "path": "apps/integrationwise-os/components/loader/entity-preview.tsx",
+          "type": "component",
+          "priority": "P1",
+          "status": "NEW",
+          "description": "Entity preview cards"
+        }
+      ],
+      "dependencies": ["pdf-parse", "xlsx", "papaparse", "mammoth", "adm-zip"]
+    },
+
+    "NORMALIZE": {
+      "name": "SPINE Module",
+      "purpose": "Convert tool-shaped JSON into ONE canonical internal schema",
+      "package": "@integratewise/spine",
+      "location": "apps/integrationwise-os/lib/spine/",
+      "motto": "Normalize Once. Render Anywhere.",
+      "views": [
+        "/normalize",
+        "/data-sources"
+      ],
+      "schemas": ["spine_accounts", "spine_contacts", "spine_deals", "spine_tasks", "spine_notes", "spine_conversations", "spine_events", "spine_plans", "spine_invoices", "spine_documents"],
+      "sql_migrations": [
+        {
+          "file": "002_spine_accounts.sql",
+          "table": "spine_accounts",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_accounts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, name VARCHAR(255) NOT NULL, domain VARCHAR(255), industry VARCHAR(100), size VARCHAR(50), health_score INT CHECK (health_score >= 0 AND health_score <= 100), risk_level VARCHAR(20), renewal_date DATE, contract_value DECIMAL(15, 2), arr DECIMAL(15, 2), source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "003_spine_contacts.sql",
+          "table": "spine_contacts",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_contacts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, account_id UUID REFERENCES spine_accounts(id) ON DELETE SET NULL, first_name VARCHAR(100), last_name VARCHAR(100), full_name VARCHAR(255), email VARCHAR(255), phone VARCHAR(50), title VARCHAR(200), department VARCHAR(100), role_type VARCHAR(50), engagement_score INT, last_contacted_at TIMESTAMPTZ, source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "004_spine_deals.sql",
+          "table": "spine_deals",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_deals (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, account_id UUID REFERENCES spine_accounts(id) ON DELETE SET NULL, contact_id UUID REFERENCES spine_contacts(id) ON DELETE SET NULL, name VARCHAR(255) NOT NULL, amount DECIMAL(15, 2), currency VARCHAR(3) DEFAULT 'USD', stage VARCHAR(100), probability INT, close_date DATE, expected_close_date DATE, days_in_stage INT DEFAULT 0, source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "005_spine_tasks.sql",
+          "table": "spine_tasks",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_tasks (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, account_id UUID REFERENCES spine_accounts(id) ON DELETE SET NULL, contact_id UUID REFERENCES spine_contacts(id) ON DELETE SET NULL, deal_id UUID REFERENCES spine_deals(id) ON DELETE SET NULL, assigned_to UUID, created_by UUID, title VARCHAR(500) NOT NULL, description TEXT, status VARCHAR(50), priority VARCHAR(20), task_type VARCHAR(50), due_date DATE, completed_at TIMESTAMPTZ, source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "006_spine_notes.sql",
+          "table": "spine_notes",
+          "priority": "P1",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_notes (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, account_id UUID REFERENCES spine_accounts(id), contact_id UUID REFERENCES spine_contacts(id), deal_id UUID REFERENCES spine_deals(id), task_id UUID REFERENCES spine_tasks(id), author_id UUID, title VARCHAR(255), content TEXT NOT NULL, note_type VARCHAR(50), source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "007_spine_conversations.sql",
+          "table": "spine_conversations",
+          "priority": "P1",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_conversations (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, account_id UUID REFERENCES spine_accounts(id), contact_id UUID REFERENCES spine_contacts(id), thread_id VARCHAR(255), subject VARCHAR(500), channel VARCHAR(50), participants JSONB DEFAULT '[]', message_count INT DEFAULT 0, last_message_at TIMESTAMPTZ, sentiment VARCHAR(20), source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "008_spine_plans.sql",
+          "table": "spine_plans",
+          "priority": "P1",
+          "sql": "CREATE TABLE IF NOT EXISTS spine_plans (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), spine_id VARCHAR(50) UNIQUE NOT NULL, workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, owner_id UUID, name VARCHAR(255) NOT NULL, description TEXT, plan_type VARCHAR(50), status VARCHAR(50), progress INT DEFAULT 0, target_date DATE, key_results JSONB DEFAULT '[]', source_tool VARCHAR(50), source_tool_id VARCHAR(255), metadata JSONB DEFAULT '{}', tags TEXT[], created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "009_identity_maps.sql",
+          "table": "identity_maps",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS identity_maps (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, entity_type VARCHAR(50) NOT NULL, spine_id VARCHAR(50) NOT NULL, source_tool VARCHAR(50) NOT NULL, source_tool_id VARCHAR(255) NOT NULL, signature_hash VARCHAR(64) NOT NULL, match_confidence DECIMAL(3,2), is_primary BOOLEAN DEFAULT false, merged_into UUID, metadata JSONB DEFAULT '{}', created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW(), UNIQUE(workspace_id, source_tool, source_tool_id));"
+        },
+        {
+          "file": "017_indexes.sql",
+          "table": "all_indexes",
+          "priority": "P0",
+          "sql": "CREATE INDEX idx_spine_accounts_workspace ON spine_accounts(workspace_id); CREATE INDEX idx_spine_accounts_domain ON spine_accounts(domain); CREATE INDEX idx_spine_contacts_workspace ON spine_contacts(workspace_id); CREATE INDEX idx_spine_contacts_account ON spine_contacts(account_id); CREATE INDEX idx_spine_contacts_email ON spine_contacts(email); CREATE INDEX idx_spine_deals_workspace ON spine_deals(workspace_id); CREATE INDEX idx_spine_deals_stage ON spine_deals(stage); CREATE INDEX idx_spine_tasks_workspace ON spine_tasks(workspace_id); CREATE INDEX idx_spine_tasks_status ON spine_tasks(status); CREATE INDEX idx_identity_maps_signature ON identity_maps(signature_hash);"
+        }
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/lib/spine/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/types.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/queries.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/mutations.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/hubspot.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/salesforce.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/slack.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/gmail.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/notion.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/asana.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/spine/normalizers/stripe.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/normalize/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/normalize/preview/route.ts",
+          "type": "api",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/spine/accounts/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/spine/contacts/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/spine/deals/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/spine/tasks/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/spine/search/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/spine/account-card.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/spine/contact-card.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/spine/deal-card.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/spine/task-card.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/spine/entity-detail.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/spine/entity-list.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/hooks/use-spine.ts",
+          "type": "hook",
+          "priority": "P0",
+          "status": "NEW"
+        }
+      ]
+    },
+
+    "THINK": {
+      "name": "IQ Hub / Memory Module",
+      "purpose": "Governed working memory + intelligence composition layer",
+      "package": "@integratewise/iq-hub",
+      "location": "apps/integrationwise-os/lib/memory/",
+      "views": [
+        "/iq-hub",
+        "/brainstorming",
+        "/insights"
+      ],
+      "memory_tiers": {
+        "session": {
+          "storage": "React state + Redis",
+          "ttl": "session",
+          "capacity": "1MB"
+        },
+        "working": {
+          "storage": "Redis",
+          "ttl": "24h",
+          "capacity": "10MB"
+        },
+        "long_term": {
+          "storage": "PostgreSQL + pgvector",
+          "ttl": "permanent",
+          "capacity": "unlimited"
+        }
+      },
+      "sql_migrations": [
+        {
+          "file": "010_memory_embeddings.sql",
+          "table": "memory_embeddings",
+          "priority": "P0",
+          "sql": "CREATE EXTENSION IF NOT EXISTS vector; CREATE TABLE IF NOT EXISTS memory_embeddings (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, entity_type VARCHAR(50) NOT NULL, entity_id UUID NOT NULL, chunk_index INT DEFAULT 0, content TEXT NOT NULL, embedding vector(1536), memory_tier VARCHAR(20) DEFAULT 'long_term', expires_at TIMESTAMPTZ, metadata JSONB DEFAULT '{}', created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW()); CREATE INDEX idx_memory_embeddings_workspace ON memory_embeddings(workspace_id); CREATE INDEX idx_memory_embeddings_entity ON memory_embeddings(entity_type, entity_id); CREATE INDEX idx_memory_embeddings_vector ON memory_embeddings USING ivfflat (embedding vector_cosine_ops);"
+        }
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/lib/memory/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/memory/session-memory.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/memory/working-memory.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/memory/long-term-memory.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/memory/context-builder.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/memory/embedding-service.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/memory/search/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/memory/context/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/memory/store/route.ts",
+          "type": "api",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/memory/context-panel.tsx",
+          "type": "component",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/memory/recent-entities.tsx",
+          "type": "component",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/memory/search-results.tsx",
+          "type": "component",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/hooks/use-memory.ts",
+          "type": "hook",
+          "priority": "P0",
+          "status": "NEW"
+        }
+      ]
+    },
+
+    "ACT": {
+      "name": "Brain Agent Module",
+      "purpose": "Execute workflows with safety, governance, and audit",
+      "package": "@integratewise/brain-agent",
+      "location": "apps/integrationwise-os/lib/brain-agent/",
+      "views": [
+        "/today",
+        "/tasks",
+        "/command-center"
+      ],
+      "modes": {
+        "proactive": {
+          "description": "Suggest -> Draft -> Confirm -> Execute",
+          "default": true
+        },
+        "autonomous": {
+          "description": "Event -> Rule Match -> Auto-Execute",
+          "default": false,
+          "requires": "explicit_opt_in"
+        }
+      },
+      "sql_migrations": [
+        {
+          "file": "012_brain_agent_rules.sql",
+          "table": "brain_agent_rules",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS brain_agent_rules (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, name VARCHAR(255) NOT NULL, description TEXT, rule_type VARCHAR(50), trigger_conditions JSONB NOT NULL, action_config JSONB NOT NULL, mode VARCHAR(20) DEFAULT 'proactive', is_active BOOLEAN DEFAULT true, last_triggered_at TIMESTAMPTZ, trigger_count INT DEFAULT 0, created_by UUID, approved_by UUID, created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "013_brain_agent_suggestions.sql",
+          "table": "brain_agent_suggestions",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS brain_agent_suggestions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, user_id UUID, rule_id UUID, type VARCHAR(50), title VARCHAR(500) NOT NULL, detail TEXT, actions JSONB DEFAULT '[]', context JSONB DEFAULT '{}', related_entities JSONB DEFAULT '[]', confidence DECIMAL(3, 2), priority VARCHAR(20), status VARCHAR(20) DEFAULT 'pending', expires_at TIMESTAMPTZ, responded_at TIMESTAMPTZ, response_action VARCHAR(100), created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        },
+        {
+          "file": "014_brain_agent_executions.sql",
+          "table": "brain_agent_executions",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS brain_agent_executions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, suggestion_id UUID, rule_id UUID, triggered_by UUID, action_type VARCHAR(100) NOT NULL, action_config JSONB NOT NULL, mode VARCHAR(20), status VARCHAR(20) DEFAULT 'pending', result JSONB DEFAULT '{}', error_message TEXT, started_at TIMESTAMPTZ, completed_at TIMESTAMPTZ, duration_ms INT, audit_log JSONB DEFAULT '[]', created_at TIMESTAMPTZ DEFAULT NOW());"
+        }
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/lib/brain-agent/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/brain-agent/pattern-analyzer.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/brain-agent/suggestion-generator.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/brain-agent/rule-engine.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/brain-agent/action-executor.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/brain-agent/policy-gate.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/brain-agent/suggestions/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/brain-agent/execute/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/brain-agent/rules/route.ts",
+          "type": "api",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/brain-agent/dismiss/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/cron/brain-agent-patterns/route.ts",
+          "type": "api",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/brain-agent/suggestion-card.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/brain-agent/suggestion-list.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/brain-agent/action-button.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/brain-agent/rule-editor.tsx",
+          "type": "component",
+          "priority": "P2",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/hooks/use-brain-agent.ts",
+          "type": "hook",
+          "priority": "P0",
+          "status": "NEW"
+        }
+      ]
+    },
+
+    "GOVERN": {
+      "name": "Governance + RBAC Module",
+      "purpose": "Rules, permissions, audit trails, compliance",
+      "package": "@integratewise/governance",
+      "location": "apps/integrationwise-os/lib/governance/",
+      "views": [
+        "/governance",
+        "/admin",
+        "/release-control"
+      ],
+      "roles": {
+        "visionary": {
+          "level": 100,
+          "description": "Owner/Founder - Full platform access"
+        },
+        "missionary": {
+          "level": 80,
+          "description": "Admin - Governance and configuration"
+        },
+        "practitioner": {
+          "level": 50,
+          "description": "Domain expert - Full domain access"
+        },
+        "passenger": {
+          "level": 20,
+          "description": "Observer - Read-only access"
+        }
+      },
+      "sql_migrations": [
+        {
+          "file": "016_audit_logs.sql",
+          "table": "audit_logs",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS audit_logs (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, user_id UUID, user_email VARCHAR(255), event_type VARCHAR(100) NOT NULL, event_category VARCHAR(50), resource_type VARCHAR(100), resource_id UUID, action VARCHAR(50), details JSONB DEFAULT '{}', ip_address INET, user_agent TEXT, session_id VARCHAR(255), status VARCHAR(20), error_message TEXT, created_at TIMESTAMPTZ DEFAULT NOW()); CREATE INDEX idx_audit_workspace ON audit_logs(workspace_id); CREATE INDEX idx_audit_user ON audit_logs(user_id); CREATE INDEX idx_audit_type ON audit_logs(event_type); CREATE INDEX idx_audit_created ON audit_logs(created_at);"
+        }
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/lib/governance/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/governance/audit-logger.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/governance/policy-engine.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/governance/hooks.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/rbac/types.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "MERGE"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/rbac/roles.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/rbac/permissions.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/rbac/guards.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/rbac/permission-guard.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "MERGE"
+        },
+        {
+          "path": "apps/integrationwise-os/components/rbac/role-badge.tsx",
+          "type": "component",
+          "priority": "P1",
+          "status": "NEW"
+        }
+      ]
+    },
+
+    "CONNECTORS": {
+      "name": "OAuth + Integration Module",
+      "purpose": "Zero-friction tool connections (connector-first UX)",
+      "package": "@integratewise/connectors",
+      "location": "apps/integrationwise-os/lib/connectors/",
+      "views": [
+        "/integrations",
+        "/settings/integrations"
+      ],
+      "tiers": {
+        "tier1_oauth": {
+          "description": "OAuth Connector (Primary Default)",
+          "providers": ["hubspot", "google", "slack", "notion", "asana", "stripe", "github", "salesforce"]
+        },
+        "tier2_import": {
+          "description": "Import / Forwarding (First Session Value)",
+          "methods": ["file_upload", "copy_paste", "email_forward"]
+        },
+        "tier3_webhook": {
+          "description": "Webhook / API Key (Advanced)",
+          "methods": ["custom_json", "api_key"]
+        }
+      },
+      "sql_migrations": [
+        {
+          "file": "011_integrations.sql",
+          "table": "integrations",
+          "priority": "P0",
+          "sql": "CREATE TABLE IF NOT EXISTS integrations (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, provider VARCHAR(50) NOT NULL, provider_account_id VARCHAR(255), provider_account_name VARCHAR(255), status VARCHAR(20) DEFAULT 'pending', error_message TEXT, sync_enabled BOOLEAN DEFAULT true, sync_frequency VARCHAR(20) DEFAULT 'hourly', last_sync_at TIMESTAMPTZ, next_sync_at TIMESTAMPTZ, scopes TEXT[], config JSONB DEFAULT '{}', records_synced INT DEFAULT 0, created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW(), UNIQUE(workspace_id, provider, provider_account_id)); CREATE TABLE IF NOT EXISTS integration_tokens (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), integration_id UUID NOT NULL REFERENCES integrations(id) ON DELETE CASCADE, access_token_encrypted TEXT NOT NULL, refresh_token_encrypted TEXT, token_type VARCHAR(50) DEFAULT 'Bearer', expires_at TIMESTAMPTZ, refresh_token_expires_at TIMESTAMPTZ, created_at TIMESTAMPTZ DEFAULT NOW(), updated_at TIMESTAMPTZ DEFAULT NOW());"
+        }
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/lib/connectors/index.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/oauth-registry.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/oauth-client.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/token-manager.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/sync-engine.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/hubspot.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/google.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/slack.ts",
+          "type": "library",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/notion.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/asana.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/stripe.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/connectors/providers/github.ts",
+          "type": "library",
+          "priority": "P2",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/connectors/oauth/start/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/connectors/oauth/callback/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/connectors/status/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/connectors/disconnect/route.ts",
+          "type": "api",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/connectors/connector-card.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/connectors/connector-list.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/connectors/oauth-button.tsx",
+          "type": "component",
+          "priority": "P0",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/components/connectors/sync-status.tsx",
+          "type": "component",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/hooks/use-connector.ts",
+          "type": "hook",
+          "priority": "P0",
+          "status": "NEW"
+        }
+      ],
+      "env_vars": [
+        "HUBSPOT_CLIENT_ID",
+        "HUBSPOT_CLIENT_SECRET",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "SLACK_CLIENT_ID",
+        "SLACK_CLIENT_SECRET",
+        "NOTION_CLIENT_ID",
+        "NOTION_CLIENT_SECRET",
+        "TOKEN_ENCRYPTION_KEY"
+      ]
+    },
+
+    "REPEAT": {
+      "name": "Cycle Engine Module",
+      "purpose": "Scheduled loops, reporting, continuous improvement",
+      "package": "@integratewise/cycles",
+      "location": "apps/integrationwise-os/lib/cycles/",
+      "views": [
+        "/metrics",
+        "/cockpit"
+      ],
+      "cycle_types": ["daily", "weekly", "monthly", "quarterly"],
+      "sql_migrations": [
+        {
+          "file": "015_cycle_executions.sql",
+          "table": "cycle_executions",
+          "priority": "P1",
+          "sql": "CREATE TABLE IF NOT EXISTS cycle_executions (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), workspace_id UUID NOT NULL REFERENCES workspaces(id) ON DELETE CASCADE, cycle_type VARCHAR(50), cycle_name VARCHAR(255) NOT NULL, period_start DATE NOT NULL, period_end DATE NOT NULL, status VARCHAR(20) DEFAULT 'pending', started_at TIMESTAMPTZ, completed_at TIMESTAMPTZ, metrics JSONB DEFAULT '{}', insights JSONB DEFAULT '[]', recommendations JSONB DEFAULT '[]', report_generated BOOLEAN DEFAULT false, report_url TEXT, created_at TIMESTAMPTZ DEFAULT NOW()); CREATE INDEX idx_cycles_workspace ON cycle_executions(workspace_id); CREATE INDEX idx_cycles_type ON cycle_executions(cycle_type);"
+        }
+      ],
+      "files": [
+        {
+          "path": "apps/integrationwise-os/lib/cycles/index.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/cycles/cycle-definitions.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/cycles/cycle-executor.ts",
+          "type": "library",
+          "priority": "P1",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/lib/cycles/report-generator.ts",
+          "type": "library",
+          "priority": "P2",
+          "status": "NEW"
+        },
+        {
+          "path": "apps/integrationwise-os/app/api/cron/cycle-executor/route.ts",
+          "type": "api",
+          "priority": "P1",
+          "status": "NEW"
+        }
+      ]
+    }
+  },
+
+  "views_to_merge": [
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/today-view.tsx",
+      "target": "apps/integrationwise-os/components/views/today-view.tsx",
+      "priority": "P0",
+      "layer": "ACT"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/cockpit-view.tsx",
+      "target": "apps/integrationwise-os/components/views/cockpit-view.tsx",
+      "priority": "P0",
+      "layer": "REPEAT"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/governance-view.tsx",
+      "target": "apps/integrationwise-os/components/views/governance-view.tsx",
+      "priority": "P0",
+      "layer": "GOVERN"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/architecture-view.tsx",
+      "target": "apps/integrationwise-os/components/views/architecture-view.tsx",
+      "priority": "P1",
+      "layer": "GOVERN"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/data-flow-view.tsx",
+      "target": "apps/integrationwise-os/components/views/data-flow-view.tsx",
+      "priority": "P1",
+      "layer": "NORMALIZE"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/release-control-view.tsx",
+      "target": "apps/integrationwise-os/components/views/release-control-view.tsx",
+      "priority": "P1",
+      "layer": "GOVERN"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/cs-accounts-view.tsx",
+      "target": "apps/integrationwise-os/components/views/cs-accounts-view.tsx",
+      "priority": "P0",
+      "layer": "NORMALIZE"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/cs-contacts-view.tsx",
+      "target": "apps/integrationwise-os/components/views/cs-contacts-view.tsx",
+      "priority": "P0",
+      "layer": "NORMALIZE"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/cs-meetings-view.tsx",
+      "target": "apps/integrationwise-os/components/views/cs-meetings-view.tsx",
+      "priority": "P1",
+      "layer": "ACT"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/cs-account-detail-view.tsx",
+      "target": "apps/integrationwise-os/components/views/cs-account-detail-view.tsx",
+      "priority": "P0",
+      "layer": "NORMALIZE"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/iq-hub-view.tsx",
+      "target": "apps/integrationwise-os/components/views/iq-hub-view.tsx",
+      "priority": "P0",
+      "layer": "THINK"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/views/brainstorming-view.tsx",
+      "target": "apps/integrationwise-os/components/views/brainstorming-view.tsx",
+      "priority": "P1",
+      "layer": "THINK"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/sidebars/enhanced-sidebar.tsx",
+      "target": "apps/integrationwise-os/components/sidebars/enhanced-sidebar.tsx",
+      "priority": "P0",
+      "layer": "ALL"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/sidebars/enhanced-header.tsx",
+      "target": "apps/integrationwise-os/components/sidebars/enhanced-header.tsx",
+      "priority": "P0",
+      "layer": "ALL"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/components/rbac/permission-guard.tsx",
+      "target": "apps/integrationwise-os/components/rbac/permission-guard.tsx",
+      "priority": "P0",
+      "layer": "GOVERN"
+    },
+    {
+      "source": "integrate-wise-operating-syst-2/lib/rbac/types.ts",
+      "target": "apps/integrationwise-os/lib/rbac/types.ts",
+      "priority": "P0",
+      "layer": "GOVERN"
+    }
+  ],
+
+  "n8n_workflows": {
+    "normalizers": [
+      "hubspot-contact-normalizer",
+      "hubspot-company-normalizer",
+      "hubspot-deal-normalizer",
+      "hubspot-task-normalizer",
+      "salesforce-contact-normalizer",
+      "salesforce-account-normalizer",
+      "salesforce-opportunity-normalizer",
+      "slack-message-normalizer",
+      "gmail-thread-normalizer",
+      "notion-page-normalizer",
+      "asana-task-normalizer",
+      "jira-issue-normalizer",
+      "linear-issue-normalizer",
+      "stripe-customer-normalizer",
+      "stripe-invoice-normalizer",
+      "google-calendar-normalizer",
+      "github-issue-normalizer"
+    ],
+    "orchestrators": [
+      "initial-sync-orchestrator",
+      "incremental-sync-orchestrator",
+      "real-time-webhook-router",
+      "file-upload-processor",
+      "identity-deduplication-flow",
+      "health-score-calculator",
+      "brain-agent-pattern-detector",
+      "cycle-report-generator"
+    ],
+    "action_executors": [
+      "create-task-action",
+      "send-slack-notification",
+      "send-email-action",
+      "update-crm-record",
+      "schedule-meeting-action",
+      "create-note-action",
+      "assign-task-action",
+      "change-deal-stage",
+      "create-follow-up",
+      "archive-conversation",
+      "generate-report",
+      "escalate-risk"
+    ]
+  },
+
+  "layer_to_view_mapping": {
+    "LOAD": {
+      "primary_views": ["/loader", "/ai-loader", "/onboarding/load-data"],
+      "components": ["file-upload-zone", "processing-status", "preview-panel"]
+    },
+    "NORMALIZE": {
+      "primary_views": ["/normalize", "/data-sources", "/cs/accounts", "/cs/contacts", "/cs/accounts/[id]"],
+      "components": ["account-card", "contact-card", "deal-card", "entity-list"]
+    },
+    "THINK": {
+      "primary_views": ["/iq-hub", "/brainstorming", "/insights"],
+      "components": ["context-panel", "recent-entities", "memory-search"]
+    },
+    "ACT": {
+      "primary_views": ["/today", "/tasks", "/command-center", "/cs/meetings"],
+      "components": ["suggestion-card", "suggestion-list", "action-button"]
+    },
+    "GOVERN": {
+      "primary_views": ["/governance", "/admin", "/release-control", "/architecture"],
+      "components": ["permission-guard", "role-badge", "audit-log"]
+    },
+    "CONNECTORS": {
+      "primary_views": ["/integrations", "/settings/integrations", "/data-flow"],
+      "components": ["connector-card", "oauth-button", "sync-status"]
+    },
+    "REPEAT": {
+      "primary_views": ["/metrics", "/cockpit"],
+      "components": ["cycle-report", "metrics-dashboard"]
+    }
+  },
+
+  "implementation_phases": [
+    {
+      "phase": 1,
+      "name": "SPINE Schema",
+      "weeks": "Week 1",
+      "layers": ["NORMALIZE"],
+      "deliverables": [
+        "Run all SPINE SQL migrations",
+        "Create spine/types.ts",
+        "Create spine/queries.ts",
+        "Create spine/mutations.ts",
+        "Create SPINE API endpoints"
+      ]
+    },
+    {
+      "phase": 2,
+      "name": "Stage 2 Loader",
+      "weeks": "Weeks 2-3",
+      "layers": ["LOAD"],
+      "deliverables": [
+        "Complete file parsers",
+        "Implement entity extraction",
+        "Create upload API",
+        "Build processing UI"
+      ]
+    },
+    {
+      "phase": 3,
+      "name": "Memory Layer",
+      "weeks": "Weeks 4-5",
+      "layers": ["THINK"],
+      "deliverables": [
+        "Run memory SQL migration",
+        "Implement 3-tier memory",
+        "Create embedding service",
+        "Build context builder"
+      ]
+    },
+    {
+      "phase": 4,
+      "name": "OAuth Connectors",
+      "weeks": "Weeks 6-7",
+      "layers": ["CONNECTORS"],
+      "deliverables": [
+        "Run integrations SQL migration",
+        "Implement OAuth registry",
+        "Create HubSpot/Google/Slack providers",
+        "Build sync engine"
+      ]
+    },
+    {
+      "phase": 5,
+      "name": "n8n Workflows",
+      "weeks": "Weeks 8-9",
+      "layers": ["NORMALIZE"],
+      "deliverables": [
+        "Create 17 normalizer workflows",
+        "Create 8 orchestrator workflows",
+        "Deploy to n8n instance"
+      ]
+    },
+    {
+      "phase": 6,
+      "name": "Brain Agent",
+      "weeks": "Weeks 10-11",
+      "layers": ["ACT"],
+      "deliverables": [
+        "Run brain agent SQL migrations",
+        "Implement pattern analyzer",
+        "Create suggestion generator",
+        "Build action executor"
+      ]
+    },
+    {
+      "phase": 7,
+      "name": "Domain Views",
+      "weeks": "Weeks 12-15",
+      "layers": ["ALL"],
+      "deliverables": [
+        "Merge 16 views from integrate-wise-2",
+        "Implement CS-First views",
+        "Create 13 practitioner domain views"
+      ]
+    },
+    {
+      "phase": 8,
+      "name": "Cycle Engine",
+      "weeks": "Week 16",
+      "layers": ["REPEAT", "GOVERN"],
+      "deliverables": [
+        "Run cycle/audit SQL migrations",
+        "Implement cycle executor",
+        "Create report generator",
+        "Deploy cron jobs"
+      ]
+    }
+  ]
+}

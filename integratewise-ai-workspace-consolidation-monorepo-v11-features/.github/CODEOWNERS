@@ -1,0 +1,69 @@
+# =============================================================================
+# CODEOWNERS - IntegrateWise Mono-Repo
+# =============================================================================
+# This file defines code ownership for automatic review assignment.
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Format: path @github-username-or-team
+# Order matters: later patterns take precedence
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Default Owners (for everything not matched below)
+# -----------------------------------------------------------------------------
+* @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# Root Configuration Files
+# -----------------------------------------------------------------------------
+/.github/ @NirmalPrinceJ
+/turbo.json @NirmalPrinceJ
+/pnpm-workspace.yaml @NirmalPrinceJ
+/package.json @NirmalPrinceJ
+/tsconfig.base.json @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# CI/CD Workflows - Platform Team
+# -----------------------------------------------------------------------------
+/.github/workflows/ @NirmalPrinceJ
+/.github/actions/ @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# Apps - Feature Teams
+# -----------------------------------------------------------------------------
+/apps/integratewise-core-engine/ @NirmalPrinceJ
+/apps/integrationwise-os/ @NirmalPrinceJ
+/apps/hub-frontend-app/ @NirmalPrinceJ
+/apps/integratewise-webhooks/ @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# Shared Packages - Platform Team
+# -----------------------------------------------------------------------------
+/packages/config/ @NirmalPrinceJ
+/packages/lib/ @NirmalPrinceJ
+/packages/types/ @NirmalPrinceJ
+/packages/ui/ @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# Documentation
+# -----------------------------------------------------------------------------
+/docs/ @NirmalPrinceJ
+/*.md @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# Security-Sensitive Files
+# Require explicit approval for changes to auth, secrets, or config
+# -----------------------------------------------------------------------------
+**/auth/ @NirmalPrinceJ
+**/.env* @NirmalPrinceJ
+**/secrets* @NirmalPrinceJ
+/docs/env-manifest.json @NirmalPrinceJ
+/docs/runbooks/secret-rotation.md @NirmalPrinceJ
+
+# -----------------------------------------------------------------------------
+# Database & Data Files
+# -----------------------------------------------------------------------------
+/scripts/*.sql @NirmalPrinceJ
+**/migrations/ @NirmalPrinceJ
+**/schema.prisma @NirmalPrinceJ
+/docs/runbooks/database.md @NirmalPrinceJ

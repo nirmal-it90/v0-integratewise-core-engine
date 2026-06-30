@@ -1,0 +1,134 @@
+name: Smoke Tests
+
+on:
+  workflow_run:
+    workflows: ["Deploy IntegrateWise OS", "Deploy Hub Frontend"]
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Environment to test'
+        required: true
+        default: 'preview'
+        type: choice
+        options:
+          - preview
+          - production
+
+jobs:
+  smoke-tests:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    name: Run Smoke Tests
+
+    env:
+      TEST_URL: ${{ github.event.inputs.environment == 'production' && 'https://app.integratewise.co' || 'https://preview.integratewise.co' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Wait for deployment
+        run: sleep 30
+
+      - name: Test Health Endpoint
+        id: health
+        run: |
+          echo "Testing health endpoint at $TEST_URL/api/health"
+
+          RESPONSE=$(curl -s -w "\n%{http_code}" "$TEST_URL/api/health" || echo "error")
+          HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+          BODY=$(echo "$RESPONSE" | head -n-1)
+
+          echo "HTTP Status: $HTTP_CODE"
+          echo "Response: $BODY"
+
+          if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "503" ]; then
+            echo "::error::Health check failed with status $HTTP_CODE"
+            exit 1
+          fi
+
+          # Parse response
+          STATUS=$(echo "$BODY" | jq -r '.status')
+          DB_STATUS=$(echo "$BODY" | jq -r '.checks.database.status')
+          AUTH_STATUS=$(echo "$BODY" | jq -r '.checks.auth.status')
+
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "db_status=$DB_STATUS" >> $GITHUB_OUTPUT
+          echo "auth_status=$AUTH_STATUS" >> $GITHUB_OUTPUT
+
+          if [ "$STATUS" == "unhealthy" ]; then
+            echo "::warning::Application is unhealthy"
+          fi
+
+      - name: Test NEXTAUTH_URL Resolution
+        run: |
+          echo "Testing NextAuth endpoint"
+
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$TEST_URL/api/auth/providers")
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::error::NextAuth providers endpoint failed with status $HTTP_CODE"
+            exit 1
+          fi
+
+          echo "✅ NextAuth endpoint responding"
+
+      - name: Test Database Connection
+        run: |
+          DB_STATUS="${{ steps.health.outputs.db_status }}"
+
+          if [ "$DB_STATUS" != "healthy" ]; then
+            echo "::error::Database health check failed"
+            exit 1
+          fi
+
+          echo "✅ Database connection healthy"
+
+      - name: Test Webhook Endpoint
+        env:
+          WEBHOOK_URL: ${{ github.event.inputs.environment == 'production' && 'https://webhooks.integratewise.co' || 'https://webhooks-staging.integratewise.co' }}
+        run: |
+          echo "Testing webhook health endpoint"
+
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$WEBHOOK_URL/health" || echo "000")
+
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "::warning::Webhook health check returned status $HTTP_CODE"
+          else
+            echo "✅ Webhook endpoint responding"
+          fi
+
+      - name: Verify AI Key Presence
+        run: |
+          AI_STATUS="${{ steps.health.outputs.auth_status }}"
+
+          # This is a proxy check - if auth is configured, AI likely is too
+          if [ "$AI_STATUS" == "healthy" ]; then
+            echo "✅ Configuration appears complete"
+          else
+            echo "::warning::Some configuration may be missing"
+          fi
+
+      - name: Summary
+        run: |
+          echo "## Smoke Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Check | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Health Endpoint | ${{ steps.health.outputs.status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Database | ${{ steps.health.outputs.db_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Auth Config | ${{ steps.health.outputs.auth_status }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Environment: $TEST_URL" >> $GITHUB_STEP_SUMMARY
+
+      - name: Fail if unhealthy
+        if: steps.health.outputs.status == 'unhealthy'
+        run: |
+          echo "::error::Application is unhealthy after deployment"
+          exit 1

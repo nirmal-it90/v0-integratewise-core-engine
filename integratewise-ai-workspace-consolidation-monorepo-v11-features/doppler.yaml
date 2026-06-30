@@ -1,0 +1,26 @@
+# Doppler Configuration
+# https://docs.doppler.com/docs/doppler-yaml
+#
+# This file defines which Doppler project and configs to use
+# for different environments.
+
+setup:
+  project: integratewise
+  config: dev
+
+# Environment-specific configurations
+environments:
+  # Local development
+  dev:
+    project: integratewise
+    config: dev
+  
+  # Preview/Staging environment  
+  preview:
+    project: integratewise
+    config: stg
+  
+  # Production environment
+  production:
+    project: integratewise
+    config: prd

@@ -1,0 +1,960 @@
+{
+  "config": {
+    "configFile": "/Users/nirmal/Github/13.1/integratewise-ai-workspace/apps/integrationwise-os/playwright.config.ts",
+    "rootDir": "/Users/nirmal/Github/13.1/integratewise-ai-workspace/apps/integrationwise-os/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 5
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "html",
+        {
+          "outputFolder": "playwright-report"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "test-results/results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/nirmal/Github/13.1/integratewise-ai-workspace/apps/integrationwise-os/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/nirmal/Github/13.1/integratewise-ai-workspace/apps/integrationwise-os/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/nirmal/Github/13.1/integratewise-ai-workspace/apps/integrationwise-os/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 5
+        },
+        "id": "mobile",
+        "name": "mobile",
+        "testDir": "/Users/nirmal/Github/13.1/integratewise-ai-workspace/apps/integrationwise-os/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.57.0",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "autonoma.spec.ts",
+      "file": "autonoma.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Autonoma AI - Core User Flows",
+          "file": "autonoma.spec.ts",
+          "line": 10,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Landing & Marketing Pages",
+              "file": "autonoma.spec.ts",
+              "line": 12,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Homepage loads and displays key elements",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 1201,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:15.749Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-d53a5a8794c15cc332d3",
+                  "file": "autonoma.spec.ts",
+                  "line": 13,
+                  "column": 9
+                },
+                {
+                  "title": "OS landing page displays features",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 1679,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:15.720Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-d5e890ec75179d15fa51",
+                  "file": "autonoma.spec.ts",
+                  "line": 24,
+                  "column": 9
+                },
+                {
+                  "title": "CS landing page loads correctly",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 1698,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:15.752Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-b1cd690eb064e26a33ba",
+                  "file": "autonoma.spec.ts",
+                  "line": 34,
+                  "column": 9
+                },
+                {
+                  "title": "Pricing page shows plans",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 1629,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:15.758Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-9c455446ca1a9d11a2c7",
+                  "file": "autonoma.spec.ts",
+                  "line": 41,
+                  "column": 9
+                },
+                {
+                  "title": "Integrations page lists available integrations",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 1533,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:15.767Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-957b44a8bdbec9f5bff6",
+                  "file": "autonoma.spec.ts",
+                  "line": 51,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Authentication Flow",
+              "file": "autonoma.spec.ts",
+              "line": 58,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Login page renders correctly",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 639,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:17.406Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-5ff582cb225b7f566001",
+                  "file": "autonoma.spec.ts",
+                  "line": 59,
+                  "column": 9
+                },
+                {
+                  "title": "Signup page renders correctly",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 1135,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:17.748Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-c280fa798eb1e63bfe72",
+                  "file": "autonoma.spec.ts",
+                  "line": 70,
+                  "column": 9
+                },
+                {
+                  "title": "Login form shows validation on empty submit",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 665,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:17.835Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-f162f3c4f418a4d2f08b",
+                  "file": "autonoma.spec.ts",
+                  "line": 78,
+                  "column": 9
+                },
+                {
+                  "title": "Forgot password link exists",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 519,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:17.885Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-29855042a6613b6ed41c",
+                  "file": "autonoma.spec.ts",
+                  "line": 92,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Navigation & Routing",
+              "file": "autonoma.spec.ts",
+              "line": 100,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Navigation menu is accessible",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 377,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:17.907Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-bff5ba87e7608cea616c",
+                  "file": "autonoma.spec.ts",
+                  "line": 101,
+                  "column": 9
+                },
+                {
+                  "title": "Footer links are present",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 432,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.050Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-1812a66e1cf9ef6908f9",
+                  "file": "autonoma.spec.ts",
+                  "line": 110,
+                  "column": 9
+                },
+                {
+                  "title": "404 page handles unknown routes",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 618,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.299Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-d6579d085f550685a678",
+                  "file": "autonoma.spec.ts",
+                  "line": 121,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Protected Routes (Redirect Check)",
+              "file": "autonoma.spec.ts",
+              "line": 129,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Dashboard redirects to login when unauthenticated",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 575,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.412Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-d9f34289c694431feaaf",
+                  "file": "autonoma.spec.ts",
+                  "line": 130,
+                  "column": 9
+                },
+                {
+                  "title": "Settings redirects to login when unauthenticated",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 792,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.488Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-b8cfcf9bb7df9e9f45fa",
+                  "file": "autonoma.spec.ts",
+                  "line": 137,
+                  "column": 9
+                },
+                {
+                  "title": "Clients page requires authentication",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 774,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.509Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-3453cb5c5f65337c6e23",
+                  "file": "autonoma.spec.ts",
+                  "line": 143,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "UI Components & Interactions",
+              "file": "autonoma.spec.ts",
+              "line": 152,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Theme toggle works (if present)",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 416,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.906Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-c2b58dba8b999f708da1",
+                  "file": "autonoma.spec.ts",
+                  "line": 153,
+                  "column": 9
+                },
+                {
+                  "title": "Mobile menu toggle works",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 2,
+                          "parallelIndex": 2,
+                          "status": "passed",
+                          "duration": 475,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.930Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-66af6b469c84dc6321cf",
+                  "file": "autonoma.spec.ts",
+                  "line": 164,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Performance & Accessibility",
+              "file": "autonoma.spec.ts",
+              "line": 178,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Page loads within acceptable time",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 1,
+                          "parallelIndex": 1,
+                          "status": "passed",
+                          "duration": 386,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:18.999Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-2adb4781c084278e909b",
+                  "file": "autonoma.spec.ts",
+                  "line": 179,
+                  "column": 9
+                },
+                {
+                  "title": "No console errors on page load",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 2497,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:19.288Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-e0b2f768af479039d697",
+                  "file": "autonoma.spec.ts",
+                  "line": 188,
+                  "column": 9
+                },
+                {
+                  "title": "Images have alt attributes",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 3,
+                          "parallelIndex": 3,
+                          "status": "passed",
+                          "duration": 393,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:19.292Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-a86fe6ce923c2467ba68",
+                  "file": "autonoma.spec.ts",
+                  "line": 209,
+                  "column": 9
+                }
+              ]
+            },
+            {
+              "title": "Forms & User Input",
+              "file": "autonoma.spec.ts",
+              "line": 219,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Contact/Support form exists and validates",
+                  "ok": true,
+                  "tags": [],
+                  "tests": [
+                    {
+                      "timeout": 30000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 4,
+                          "parallelIndex": 4,
+                          "status": "passed",
+                          "duration": 1026,
+                          "errors": [],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "startTime": "2026-01-13T21:47:19.329Z",
+                          "annotations": [],
+                          "attachments": []
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "b9aff45380e0900ae4b9-73c409dbac972ff4fca9",
+                  "file": "autonoma.spec.ts",
+                  "line": 220,
+                  "column": 9
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "login-debug.spec.ts",
+      "file": "login-debug.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Login Page Debug",
+          "file": "login-debug.spec.ts",
+          "line": 8,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Check all login page elements",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 3563,
+                      "errors": [],
+                      "stdout": [
+                        {
+                          "text": "Email inputs found: 1\n"
+                        },
+                        {
+                          "text": "Password inputs found: 1\n"
+                        },
+                        {
+                          "text": "Google OAuth buttons found: 1\n"
+                        },
+                        {
+                          "text": "Microsoft OAuth buttons found: 1\n"
+                        },
+                        {
+                          "text": "Submit buttons found: 1\n"
+                        },
+                        {
+                          "text": "Loading skeletons found: 0\n"
+                        },
+                        {
+                          "text": "\nPage text preview: Welcome BackSign in to your IntegrateWise workspaceContinue with GoogleContinue with MicrosoftOr continue with emailEmailPasswordSign In with EmailDon't have an account? Sign upDEMO CREDENTIALSEmail: demo@integratewise.onlinePassword: demo123(self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"1:\\\"$Sreact.fragment\\\"\\n2:I[77372,[\\\"/_next/static/chunks/edbb8296ba1f0def.js?dpl=dpl_6dGFxYNJfNNn974iJrdRFYSpaEGX\\\",\\\"/_next/static/chunks/a3d971e6127d495d.js?dpl=dpl_6dGFxYNJfNNn974iJrdRFYSp...\n"
+                        },
+                        {
+                          "text": "\nConsole errors: 1\n"
+                        },
+                        {
+                          "text": "  - Failed to load resource: the server responded with a status of 400 ()\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2026-01-13T21:47:19.393Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "8801a0f3bd25456bda90-739c8f792d7b989330a8",
+              "file": "login-debug.spec.ts",
+              "line": 9,
+              "column": 7
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-01-13T21:47:15.287Z",
+    "duration": 7697.661,
+    "expected": 22,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

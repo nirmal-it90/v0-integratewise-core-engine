@@ -1,0 +1,54 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Cache
+.cache/
+.turbo/
+.eslintcache
+*.tsbuildinfo
+node-compile-cache/
+
+# Testing
+coverage/
+
+# Misc
+*.pem
+.vercel
+
+integratewise-os-main/
+.env*.local
+
+# Google Drive sync artifacts
+.tmp.driveupload/
+.tmp.drivedownload/
+
+# Embedded repository folders (reference only)
+integrate-wise-operating-syst-2/
+integratewise-ai-workspace/

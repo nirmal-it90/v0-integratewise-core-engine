@@ -1,0 +1,226 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "1.0.0",
+  "project": "integratewise-canonical-frontend",
+  "environments": {
+    "production": {
+      "url": "https://app.integratewise.co",
+      "branch": "main",
+      "protection": {
+        "enabled": true,
+        "requiredReviewers": 1,
+        "bypassActors": ["deploy-bot"]
+      }
+    },
+    "preview": {
+      "url": "https://preview.integratewise.co",
+      "branch": "uat",
+      "protection": {
+        "enabled": true,
+        "requiredReviewers": 0
+      }
+    },
+    "development": {
+      "url": "http://localhost:3000",
+      "branch": "feature/*",
+      "protection": {
+        "enabled": false
+      }
+    }
+  },
+  "variables": [
+    {
+      "key": "NEXTAUTH_URL",
+      "description": "Canonical URL for NextAuth callbacks",
+      "sensitive": false,
+      "required": true,
+      "owner": "platform",
+      "environments": {
+        "production": "https://app.integratewise.co",
+        "preview": "https://preview.integratewise.co",
+        "development": "http://localhost:3000"
+      }
+    },
+    {
+      "key": "NEXTAUTH_SECRET",
+      "description": "Secret for JWT signing and encryption",
+      "sensitive": true,
+      "required": true,
+      "owner": "security",
+      "rotationCadence": "90d",
+      "generator": "openssl rand -base64 32"
+    },
+    {
+      "key": "GOOGLE_CLIENT_ID",
+      "description": "Google OAuth client ID",
+      "sensitive": false,
+      "required": true,
+      "owner": "platform"
+    },
+    {
+      "key": "GOOGLE_CLIENT_SECRET",
+      "description": "Google OAuth client secret",
+      "sensitive": true,
+      "required": true,
+      "owner": "platform",
+      "rotationCadence": "365d"
+    },
+    {
+      "key": "DATABASE_URL",
+      "description": "Neon Postgres pooled connection (for Prisma queries)",
+      "sensitive": true,
+      "required": true,
+      "owner": "data",
+      "format": "postgresql://{user}:{password}@{host}/{database}?sslmode=require&pgbouncer=true",
+      "notes": "Use pooled endpoint for serverless"
+    },
+    {
+      "key": "DATABASE_URL_UNPOOLED",
+      "description": "Neon Postgres direct connection (for migrations)",
+      "sensitive": true,
+      "required": true,
+      "owner": "data",
+      "format": "postgresql://{user}:{password}@{host}/{database}?sslmode=require",
+      "notes": "Use direct endpoint for prisma migrate"
+    },
+    {
+      "key": "PGHOST",
+      "description": "Postgres host for health checks",
+      "sensitive": false,
+      "required": false,
+      "owner": "data"
+    },
+    {
+      "key": "PGUSER",
+      "description": "Postgres user for health checks",
+      "sensitive": false,
+      "required": false,
+      "owner": "data"
+    },
+    {
+      "key": "XAI_API_KEY",
+      "description": "xAI API key for AI Gateway",
+      "sensitive": true,
+      "required": true,
+      "owner": "ai",
+      "rotationCadence": "180d"
+    },
+    {
+      "key": "STRIPE_SECRET_KEY",
+      "description": "Stripe API secret key",
+      "sensitive": true,
+      "required": true,
+      "owner": "payments",
+      "rotationCadence": "365d"
+    },
+    {
+      "key": "STRIPE_WEBHOOK_SECRET",
+      "description": "Stripe webhook signing secret",
+      "sensitive": true,
+      "required": true,
+      "owner": "payments",
+      "notes": "Per-endpoint secret from Stripe dashboard"
+    },
+    {
+      "key": "HUBSPOT_CLIENT_SECRET",
+      "description": "HubSpot OAuth client secret",
+      "sensitive": true,
+      "required": false,
+      "owner": "integrations"
+    },
+    {
+      "key": "HUBSPOT_WEBHOOK_SECRET",
+      "description": "HubSpot webhook signing secret",
+      "sensitive": true,
+      "required": false,
+      "owner": "integrations"
+    },
+    {
+      "key": "NEXT_PUBLIC_DEMO_MODE",
+      "description": "Enable demo mode UI (no real mutations)",
+      "sensitive": false,
+      "required": false,
+      "owner": "product",
+      "default": "false",
+      "environments": {
+        "production": "false",
+        "preview": "true",
+        "development": "true"
+      }
+    },
+    {
+      "key": "CLOUDFLARE_API_TOKEN",
+      "description": "Cloudflare API token for Workers deploy",
+      "sensitive": true,
+      "required": true,
+      "owner": "platform",
+      "rotationCadence": "365d"
+    },
+    {
+      "key": "CLOUDFLARE_ACCOUNT_ID",
+      "description": "Cloudflare account ID",
+      "sensitive": false,
+      "required": true,
+      "owner": "platform"
+    }
+  ],
+  "owners": {
+    "platform": {
+      "team": "Platform Engineering",
+      "slack": "#platform-eng",
+      "oncall": "platform-oncall@integratewise.co"
+    },
+    "security": {
+      "team": "Security",
+      "slack": "#security",
+      "oncall": "security-oncall@integratewise.co"
+    },
+    "data": {
+      "team": "Data Engineering",
+      "slack": "#data-eng",
+      "oncall": "data-oncall@integratewise.co"
+    },
+    "ai": {
+      "team": "AI/ML",
+      "slack": "#ai-ml",
+      "oncall": "ai-oncall@integratewise.co"
+    },
+    "payments": {
+      "team": "Payments",
+      "slack": "#payments",
+      "oncall": "payments-oncall@integratewise.co"
+    },
+    "integrations": {
+      "team": "Integrations",
+      "slack": "#integrations",
+      "oncall": "integrations-oncall@integratewise.co"
+    },
+    "product": {
+      "team": "Product",
+      "slack": "#product",
+      "oncall": null
+    }
+  },
+  "slos": {
+    "auth_success_rate": {
+      "target": 0.999,
+      "window": "7d",
+      "alertThreshold": 0.995
+    },
+    "db_latency_p99": {
+      "target": "100ms",
+      "window": "1h",
+      "alertThreshold": "200ms"
+    },
+    "webhook_processing_time_p95": {
+      "target": "500ms",
+      "window": "1h",
+      "alertThreshold": "1000ms"
+    },
+    "error_rate_5xx": {
+      "target": 0.001,
+      "window": "1h",
+      "alertThreshold": 0.005
+    }
+  }
+}

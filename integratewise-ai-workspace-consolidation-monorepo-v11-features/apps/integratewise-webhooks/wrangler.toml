@@ -1,0 +1,54 @@
+name = "integratewise-webhooks"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+CORE_ENGINE_URL = "https://api.integratewise.co"
+ENVIRONMENT = "development"
+
+# KV Namespace for idempotency (create with: wrangler kv:namespace create WEBHOOK_IDEMPOTENCY)
+[[kv_namespaces]]
+binding = "WEBHOOK_IDEMPOTENCY"
+id = "REPLACE_WITH_KV_ID"
+preview_id = "REPLACE_WITH_PREVIEW_KV_ID"
+
+# Queue for dead letter (create with: wrangler queues create webhook-dead-letter)
+[[queues.producers]]
+binding = "DEAD_LETTER_QUEUE"
+queue = "webhook-dead-letter"
+
+# Secrets (set via wrangler secret put)
+# STRIPE_WEBHOOK_SECRET
+# HUBSPOT_WEBHOOK_SECRET
+# WEBFLOW_WEBHOOK_SECRET - Webflow webhook signature secret
+# WEBFLOW_API_KEY - Webflow API key for API operations
+
+[env.staging]
+name = "integratewise-webhooks-staging"
+vars = { CORE_ENGINE_URL = "https://api-staging.integratewise.co", ENVIRONMENT = "staging" }
+
+[[env.staging.kv_namespaces]]
+binding = "WEBHOOK_IDEMPOTENCY"
+id = "REPLACE_WITH_STAGING_KV_ID"
+
+[[env.staging.queues.producers]]
+binding = "DEAD_LETTER_QUEUE"
+queue = "webhook-dead-letter-staging"
+
+[env.production]
+name = "integratewise-webhooks"
+vars = { CORE_ENGINE_URL = "https://api.integratewise.co", ENVIRONMENT = "production" }
+
+[[env.production.kv_namespaces]]
+binding = "WEBHOOK_IDEMPOTENCY"
+id = "REPLACE_WITH_PROD_KV_ID"
+
+[[env.production.queues.producers]]
+binding = "DEAD_LETTER_QUEUE"
+queue = "webhook-dead-letter"
+
+# Routes (uncomment when ready)
+# routes = [
+#   { pattern = "webhooks.integratewise.co/*", zone_name = "integratewise.co" }
+# ]

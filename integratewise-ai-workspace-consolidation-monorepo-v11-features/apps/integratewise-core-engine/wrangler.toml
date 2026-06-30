@@ -1,0 +1,29 @@
+name = "integratewise-core-engine"
+main = "src/index.ts"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+[vars]
+ENVIRONMENT = "development"
+
+# Database connection (set as secret in production)
+# DATABASE_URL will be set via wrangler secret put
+
+[env.staging]
+name = "integratewise-core-engine-staging"
+vars = { ENVIRONMENT = "staging" }
+
+[env.production]
+name = "integratewise-core-engine"
+vars = { ENVIRONMENT = "production" }
+
+# Secrets (set via wrangler secret put)
+# DATABASE_URL - Neon Postgres connection string
+# OPENAI_API_KEY - OpenAI API key for AI routing
+# ANTHROPIC_API_KEY - Anthropic API key (optional)
+
+# Routes (configure when ready)
+# routes = [
+#   { pattern = "core.integratewise.co/*", zone_name = "integratewise.co" },
+#   { pattern = "api.integratewise.co/core/*", zone_name = "integratewise.co" }
+# ]

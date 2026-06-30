@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(vercel:*)",
+      "Bash(curl -s \"https://os.integratewise.online/login\")",
+      "Bash(curl:*)",
+      "Bash(git remote add:*)"
+    ]
+  }
+}

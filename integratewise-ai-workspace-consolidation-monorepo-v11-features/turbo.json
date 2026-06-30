@@ -1,0 +1,80 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["tsconfig.json"],
+  "globalEnv": [
+    "NODE_ENV",
+    "VERCEL_ENV",
+    "NEXT_PUBLIC_URL",
+    "NEXT_PUBLIC_SUPABASE_URL",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_PUBLISHABLE_KEY",
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
+    "CLERK_SECRET_KEY",
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY",
+    "CRON_SECRET",
+    "SUPABASE_ANON_KEY",
+    "SUPABASE_JWT_SECRET",
+    "SUPABASE_PUBLISHABLE_KEY",
+    "SUPABASE_SECRET_KEY",
+    "SUPABASE_SERVICE_ROLE_KEY",
+    "SUPABASE_URL",
+    "NEON_DATABASE_URL",
+    "NEON_DATABASE_URL_UNPOOLED",
+    "NEON_POSTGRES_PASSWORD",
+    "NEON_POSTGRES_URL",
+    "NEON_POSTGRES_PRISMA_URL"
+  ],
+  "tasks": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "!.env.local"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "cache": true
+    },
+    "build:staging": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env.staging"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["VERCEL_ENV"],
+      "cache": true
+    },
+    "build:production": {
+      "dependsOn": ["^build", "lint", "typecheck"],
+      "inputs": ["$TURBO_DEFAULT$", ".env.production"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"],
+      "env": ["VERCEL_ENV"],
+      "cache": true
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "lint": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "eslint.config.*", ".eslintrc*"],
+      "outputs": [],
+      "cache": true
+    },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "tsconfig.json"],
+      "outputs": [],
+      "cache": true
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "inputs": ["$TURBO_DEFAULT$", "**/*.test.ts", "**/*.test.tsx"],
+      "outputs": ["coverage/**"],
+      "cache": true
+    },
+    "deploy:staging": {
+      "dependsOn": ["build:staging", "lint", "typecheck"],
+      "cache": false
+    },
+    "deploy:production": {
+      "dependsOn": ["build:production", "lint", "typecheck", "test"],
+      "cache": false
+    }
+  }
+}

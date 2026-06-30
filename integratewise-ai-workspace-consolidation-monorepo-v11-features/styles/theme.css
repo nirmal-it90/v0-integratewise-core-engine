@@ -1,0 +1,110 @@
+/**
+ * IntegrateWise Theme CSS
+ * Semantic design tokens for consistent theming across all pages
+ *
+ * Palette (authoritative):
+ * - Primary Blue: #3F51B5 (indigo-blue)
+ * - Light Gray: #F3F4F6 (soft gray for text/surfaces)
+ * - Dark Navy: #1E2A4A (deep background)
+ * - Accent Pink: #F54476 (action/accent)
+ * - DISALLOWED: #0A1833 (must not appear anywhere)
+ */
+
+:root {
+  /* === IntegrateWise Semantic Tokens === */
+
+  /* Primary colors */
+  --iw-bg: #ffffff;
+  --iw-surface: #ffffff;
+  --iw-surface-2: #F8FAFC;
+
+  /* Text colors */
+  --iw-text: #1E2A4A;
+  --iw-text-muted: #4B5563;
+
+  /* Borders */
+  --iw-border: #E5E7EB;
+
+  /* Accent colors */
+  --iw-accent: #F54476;
+  --iw-accent-2: #3F51B5;
+
+  /* Focus states */
+  --iw-focus: #3F51B5;
+
+  /* Radius and shadows */
+  --iw-radius: 16px;
+  --iw-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode tokens */
+[data-theme="dark"],
+.dark {
+  --iw-bg: #1E2A4A;
+  --iw-surface: #19243f;
+  --iw-surface-2: #1d2a46;
+
+  --iw-text: #F3F4F6;
+  --iw-text-muted: #D1D5DB;
+
+  --iw-border: #2b3a5f;
+
+  --iw-focus: #8fa1ff;
+
+  --iw-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* === Helpers used by the landing page === */
+.iw-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .iw-container {
+    padding-inline: 1.5rem;
+  }
+}
+
+/* Accessible skip link */
+.iw-skip {
+  position: absolute;
+  left: 1rem;
+  top: 0.75rem;
+  z-index: 50;
+  transform: translateY(-200%);
+  transition: transform 160ms ease;
+  border-radius: 9999px;
+  padding: 0.5rem 0.75rem;
+  background: var(--iw-text);
+  color: var(--iw-bg);
+}
+
+.iw-skip:focus {
+  transform: translateY(0);
+  outline: 3px solid var(--iw-focus);
+  outline-offset: 2px;
+}
+
+/* Marquee animation (disabled for reduced motion) */
+@keyframes iw-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.iw-marquee-track {
+  will-change: transform;
+  animation: iw-marquee 28s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iw-marquee-track {
+    animation: none;
+  }
+}

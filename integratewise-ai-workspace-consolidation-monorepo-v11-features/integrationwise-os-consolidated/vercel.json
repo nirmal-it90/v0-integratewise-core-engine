@@ -1,0 +1,11 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "outputDirectory": ".next",
+  "crons": [
+    { "path": "/api/cron/daily-insights", "schedule": "0 9 * * *" },
+    { "path": "/api/brainstorm/daily-insights", "schedule": "0 11 * * *" },
+    { "path": "/api/cron/spend-insights", "schedule": "0 8 * * *" },
+    { "path": "/api/cron/hourly-insights", "schedule": "0 12 * * *" }
+  ]
+}

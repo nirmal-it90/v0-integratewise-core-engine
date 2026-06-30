@@ -1,0 +1,104 @@
+name: Cherry-Pick Automation
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_branch:
+        description: 'Source branch to cherry-pick from'
+        required: true
+        type: string
+      target_branch:
+        description: 'Target branch to cherry-pick to'
+        required: true
+        type: string
+      commits:
+        description: 'Commit hashes (comma-separated or range like abc123..def456)'
+        required: true
+        type: string
+      remote:
+        description: 'Remote repository (origin/bitbucket)'
+        required: false
+        default: 'origin'
+        type: choice
+        options:
+          - origin
+          - bitbucket
+
+jobs:
+  cherry-pick:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for cherry-picking
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      
+      - name: Setup remotes
+        run: |
+          if [ "${{ inputs.remote }}" == "bitbucket" ]; then
+            git remote add bitbucket git@bitbucket.org:integratewise/ai-workspace-monorepo.git || true
+            git fetch bitbucket
+          fi
+      
+      - name: List commits to cherry-pick
+        run: |
+          echo "=== Commits to cherry-pick ==="
+          git log --oneline --graph --decorate ${{ inputs.target_branch }}..${{ inputs.source_branch }} || true
+      
+      - name: Checkout target branch
+        run: |
+          git checkout ${{ inputs.target_branch }} || git checkout -b ${{ inputs.target_branch }}
+      
+      - name: Cherry-pick commits
+        id: cherry_pick
+        continue-on-error: true
+        run: |
+          # Parse commits
+          COMMITS="${{ inputs.commits }}"
+          
+          if [[ "$COMMITS" == *".."* ]]; then
+            # Range format
+            START=$(echo "$COMMITS" | cut -d'.' -f1)
+            END=$(echo "$COMMITS" | cut -d'.' -f3)
+            git cherry-pick ${START}^..${END}
+          else
+            # Comma-separated or single
+            IFS=',' read -ra COMMIT_ARRAY <<< "$COMMITS"
+            for commit in "${COMMIT_ARRAY[@]}"; do
+              commit=$(echo "$commit" | xargs)
+              git cherry-pick "$commit"
+            done
+          fi
+      
+      - name: Handle conflicts
+        if: failure() && steps.cherry_pick.outcome == 'failure'
+        run: |
+          echo "❌ Cherry-pick failed due to conflicts"
+          echo "Please resolve conflicts manually and continue"
+          echo "Run: git cherry-pick --continue"
+          exit 1
+      
+      - name: Push to target branch
+        if: success()
+        run: |
+          if [ "${{ inputs.remote }}" == "bitbucket" ]; then
+            git push bitbucket ${{ inputs.target_branch }}
+          else
+            git push origin ${{ inputs.target_branch }}
+          fi
+      
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Cherry-Pick Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Source: ${{ inputs.source_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Target: ${{ inputs.target_branch }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Commits: ${{ inputs.commits }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Status: ${{ steps.cherry_pick.outcome }}" >> $GITHUB_STEP_SUMMARY

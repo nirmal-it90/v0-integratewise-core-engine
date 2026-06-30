@@ -1,0 +1,143 @@
+# Validate Secrets Composite Action
+# Checks that required secrets are present before proceeding with workflows.
+# Fails fast if any required secrets are missing.
+
+name: 'Validate Secrets'
+description: 'Validates that required secrets are set before proceeding with deployment'
+author: 'IntegrateWise Platform Team'
+
+inputs:
+  required-secrets:
+    description: 'Comma-separated list of required secret names'
+    required: true
+  # Individual secret values to check (passed from workflow secrets context)
+  NEXTAUTH_URL:
+    description: 'NextAuth URL'
+    required: false
+  NEXTAUTH_SECRET:
+    description: 'NextAuth secret'
+    required: false
+  GOOGLE_CLIENT_ID:
+    description: 'Google OAuth Client ID'
+    required: false
+  GOOGLE_CLIENT_SECRET:
+    description: 'Google OAuth Client Secret'
+    required: false
+  DATABASE_URL:
+    description: 'Database connection string (pooled)'
+    required: false
+  DATABASE_URL_UNPOOLED:
+    description: 'Database connection string (direct)'
+    required: false
+  XAI_API_KEY:
+    description: 'xAI API Key'
+    required: false
+  STRIPE_SECRET_KEY:
+    description: 'Stripe Secret Key'
+    required: false
+  STRIPE_WEBHOOK_SECRET:
+    description: 'Stripe Webhook Secret'
+    required: false
+  CLOUDFLARE_API_TOKEN:
+    description: 'Cloudflare API Token'
+    required: false
+  CLOUDFLARE_ACCOUNT_ID:
+    description: 'Cloudflare Account ID'
+    required: false
+  VERCEL_TOKEN:
+    description: 'Vercel Deployment Token'
+    required: false
+  VERCEL_ORG_ID:
+    description: 'Vercel Organization ID'
+    required: false
+  VERCEL_PROJECT_ID:
+    description: 'Vercel Project ID'
+    required: false
+
+outputs:
+  validated:
+    description: 'Whether all secrets were validated successfully'
+    value: ${{ steps.validate.outputs.validated }}
+  missing:
+    description: 'Comma-separated list of missing secrets (if any)'
+    value: ${{ steps.validate.outputs.missing }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Validate Required Secrets
+      id: validate
+      shell: bash
+      env:
+        REQUIRED_SECRETS: ${{ inputs.required-secrets }}
+        SECRET_NEXTAUTH_URL: ${{ inputs.NEXTAUTH_URL }}
+        SECRET_NEXTAUTH_SECRET: ${{ inputs.NEXTAUTH_SECRET }}
+        SECRET_GOOGLE_CLIENT_ID: ${{ inputs.GOOGLE_CLIENT_ID }}
+        SECRET_GOOGLE_CLIENT_SECRET: ${{ inputs.GOOGLE_CLIENT_SECRET }}
+        SECRET_DATABASE_URL: ${{ inputs.DATABASE_URL }}
+        SECRET_DATABASE_URL_UNPOOLED: ${{ inputs.DATABASE_URL_UNPOOLED }}
+        SECRET_XAI_API_KEY: ${{ inputs.XAI_API_KEY }}
+        SECRET_STRIPE_SECRET_KEY: ${{ inputs.STRIPE_SECRET_KEY }}
+        SECRET_STRIPE_WEBHOOK_SECRET: ${{ inputs.STRIPE_WEBHOOK_SECRET }}
+        SECRET_CLOUDFLARE_API_TOKEN: ${{ inputs.CLOUDFLARE_API_TOKEN }}
+        SECRET_CLOUDFLARE_ACCOUNT_ID: ${{ inputs.CLOUDFLARE_ACCOUNT_ID }}
+        SECRET_VERCEL_TOKEN: ${{ inputs.VERCEL_TOKEN }}
+        SECRET_VERCEL_ORG_ID: ${{ inputs.VERCEL_ORG_ID }}
+        SECRET_VERCEL_PROJECT_ID: ${{ inputs.VERCEL_PROJECT_ID }}
+      run: |
+        echo "🔐 Validating required secrets..."
+        echo ""
+        
+        MISSING=""
+        CHECKED=0
+        FOUND=0
+        
+        # Convert comma-separated list to array
+        IFS=',' read -ra SECRETS <<< "$REQUIRED_SECRETS"
+        
+        for secret_name in "${SECRETS[@]}"; do
+          # Trim whitespace
+          secret_name=$(echo "$secret_name" | xargs)
+          
+          # Skip empty entries
+          [ -z "$secret_name" ] && continue
+          
+          CHECKED=$((CHECKED + 1))
+          
+          # Get the value from environment variable
+          var_name="SECRET_${secret_name}"
+          secret_value="${!var_name}"
+          
+          if [ -z "$secret_value" ]; then
+            echo "❌ Missing: $secret_name"
+            MISSING="${MISSING}${secret_name},"
+          else
+            echo "✅ Found: $secret_name"
+            FOUND=$((FOUND + 1))
+          fi
+        done
+        
+        echo ""
+        echo "📊 Results: $FOUND/$CHECKED secrets found"
+        
+        # Remove trailing comma from MISSING
+        MISSING="${MISSING%,}"
+        
+        if [ -n "$MISSING" ]; then
+          echo ""
+          echo "::error::Missing required secrets: $MISSING"
+          echo ""
+          echo "🔧 To fix this issue:"
+          echo "   1. Go to Repository Settings → Secrets and variables → Actions"
+          echo "   2. Add the missing secrets listed above"
+          echo "   3. Alternatively, configure secrets in the appropriate GitHub Environment"
+          echo ""
+          echo "validated=false" >> $GITHUB_OUTPUT
+          echo "missing=$MISSING" >> $GITHUB_OUTPUT
+          exit 1
+        fi
+        
+        echo ""
+        echo "✅ All required secrets are present!"
+        echo "validated=true" >> $GITHUB_OUTPUT
+        echo "missing=" >> $GITHUB_OUTPUT

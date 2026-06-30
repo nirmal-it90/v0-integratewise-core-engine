@@ -1,0 +1,247 @@
+@import 'tailwindcss';
+@import '../styles/theme.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/* IntegrateWise Semantic Color System */
+:root {
+  /* Primary Blue */
+  --iw-color-primary: #3F51B5;
+  --iw-color-primary-600: #3F51B5;
+  --iw-color-primary-700: #35449a;
+  --iw-color-primary-50: #eef0fb;
+  --iw-color-primary-100: #E1E4F8;
+  --iw-color-primary-200: #C5CBF1;
+  --iw-color-primary-300: #A8B1EA;
+  --iw-color-primary-400: #8B98E3;
+  --iw-color-primary-500: #6E7EDC;
+  --iw-color-primary-800: #2B377F;
+  --iw-color-primary-900: #212A64;
+
+  /* Accent Pink */
+  --iw-color-accent: #F54476;
+  --iw-color-accent-600: #F54476;
+  --iw-color-accent-700: #cf2c5e;
+
+  /* Backgrounds */
+  --iw-color-bg: #ffffff;
+  --iw-color-bg-muted: #F3F4F6;
+  --iw-color-surface: #ffffff;
+  --iw-color-surface-alt: #F8FAFC;
+
+  /* Text */
+  --iw-color-text-primary: #1E2A4A;
+  --iw-color-text-secondary: #4B5563;
+  --iw-color-text-on-primary: #ffffff;
+
+  /* Borders */
+  --iw-color-border: #E5E7EB;
+
+  /* Focus & Links */
+  --iw-focus-ring: #3F51B5;
+  --iw-link: #3F51B5;
+  --iw-link-hover: #35449a;
+
+  /* Legacy theme.css compatibility tokens */
+  --iw-bg: var(--iw-color-bg);
+  --iw-surface: var(--iw-color-surface);
+  --iw-surface-2: var(--iw-color-surface-alt);
+  --iw-text: var(--iw-color-text-primary);
+  --iw-text-muted: var(--iw-color-text-secondary);
+  --iw-border: var(--iw-color-border);
+  --iw-accent: var(--iw-color-accent);
+  --iw-accent-2: var(--iw-color-primary);
+  --iw-focus: var(--iw-focus-ring);
+  --iw-radius: 16px;
+  --iw-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+
+  /* shadcn/ui compatibility */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.22 0.02 258);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.02 258);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.02 258);
+  --primary: oklch(0.44 0.12 270);
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: oklch(0.97 0.005 250);
+  --secondary-foreground: oklch(0.22 0.02 258);
+  --muted: oklch(0.97 0.005 250);
+  --muted-foreground: oklch(0.45 0.01 258);
+  --accent: oklch(0.63 0.22 5);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.922 0.005 250);
+  --input: oklch(0.922 0.005 250);
+  --ring: oklch(0.44 0.12 270);
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --radius: 0.625rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.22 0.02 258);
+  --sidebar-primary: oklch(0.44 0.12 270);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0.005 250);
+  --sidebar-accent-foreground: oklch(0.22 0.02 258);
+  --sidebar-border: oklch(0.922 0.005 250);
+  --sidebar-ring: oklch(0.44 0.12 270);
+}
+
+/* Dark mode using [data-theme="dark"] or .dark class */
+[data-theme="dark"],
+.dark {
+  /* Primary Blue (lightened for dark mode) */
+  --iw-color-primary: #8fa1ff;
+  --iw-color-primary-600: #8fa1ff;
+  --iw-color-primary-700: #7a8be6;
+
+  /* Backgrounds */
+  --iw-color-bg: #1E2A4A;
+  --iw-color-bg-muted: #162038;
+  --iw-color-surface: #19243f;
+  --iw-color-surface-alt: #1d2a46;
+
+  /* Text */
+  --iw-color-text-primary: #F3F4F6;
+  --iw-color-text-secondary: #D1D5DB;
+
+  /* Borders */
+  --iw-color-border: #2b3a5f;
+
+  /* Focus & Links */
+  --iw-link: #8fa1ff;
+  --iw-link-hover: #7a8be6;
+  --iw-focus-ring: #8fa1ff;
+
+  /* Legacy tokens */
+  --iw-bg: var(--iw-color-bg);
+  --iw-surface: var(--iw-color-surface);
+  --iw-surface-2: var(--iw-color-surface-alt);
+  --iw-text: var(--iw-color-text-primary);
+  --iw-text-muted: var(--iw-color-text-secondary);
+  --iw-border: var(--iw-color-border);
+  --iw-focus: var(--iw-focus-ring);
+  --iw-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+
+  /* shadcn/ui dark mode */
+  --background: oklch(0.22 0.02 258);
+  --foreground: oklch(0.97 0.005 250);
+  --card: oklch(0.18 0.02 258);
+  --card-foreground: oklch(0.97 0.005 250);
+  --popover: oklch(0.18 0.02 258);
+  --popover-foreground: oklch(0.97 0.005 250);
+  --primary: oklch(0.72 0.1 270);
+  --primary-foreground: oklch(0.22 0.02 258);
+  --secondary: oklch(0.28 0.02 258);
+  --secondary-foreground: oklch(0.97 0.005 250);
+  --muted: oklch(0.28 0.02 258);
+  --muted-foreground: oklch(0.72 0.02 258);
+  --accent: oklch(0.63 0.22 5);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.396 0.141 25.723);
+  --destructive-foreground: oklch(0.637 0.237 25.331);
+  --border: oklch(0.32 0.02 258);
+  --input: oklch(0.28 0.02 258);
+  --ring: oklch(0.72 0.1 270);
+  --sidebar: oklch(0.2 0.02 258);
+  --sidebar-foreground: oklch(0.97 0.005 250);
+  --sidebar-primary: oklch(0.72 0.1 270);
+  --sidebar-primary-foreground: oklch(0.97 0.005 250);
+  --sidebar-accent: oklch(0.28 0.02 258);
+  --sidebar-accent-foreground: oklch(0.97 0.005 250);
+  --sidebar-border: oklch(0.32 0.02 258);
+  --sidebar-ring: oklch(0.72 0.1 270);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans, 'Inter', ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-mono, 'JetBrains Mono', ui-monospace, monospace);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* IntegrateWise semantic colors for Tailwind */
+  --color-iw-primary: var(--iw-color-primary);
+  --color-iw-primary-50: var(--iw-color-primary-50);
+  --color-iw-primary-100: var(--iw-color-primary-100);
+  --color-iw-primary-200: var(--iw-color-primary-200);
+  --color-iw-primary-300: var(--iw-color-primary-300);
+  --color-iw-primary-400: var(--iw-color-primary-400);
+  --color-iw-primary-500: var(--iw-color-primary-500);
+  --color-iw-primary-600: var(--iw-color-primary-600);
+  --color-iw-primary-700: var(--iw-color-primary-700);
+  --color-iw-primary-800: var(--iw-color-primary-800);
+  --color-iw-primary-900: var(--iw-color-primary-900);
+  --color-iw-accent: var(--iw-color-accent);
+  --color-iw-accent-600: var(--iw-color-accent-600);
+  --color-iw-accent-700: var(--iw-color-accent-700);
+  --color-iw-bg: var(--iw-color-bg);
+  --color-iw-bg-muted: var(--iw-color-bg-muted);
+  --color-iw-surface: var(--iw-color-surface);
+  --color-iw-surface-alt: var(--iw-color-surface-alt);
+  --color-iw-text-primary: var(--iw-color-text-primary);
+  --color-iw-text-secondary: var(--iw-color-text-secondary);
+  --color-iw-text-onPrimary: var(--iw-color-text-on-primary);
+  --color-iw-border: var(--iw-color-border);
+  --color-iw-link: var(--iw-link);
+  --color-iw-link-hover: var(--iw-link-hover);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html,
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    background: var(--iw-color-bg);
+    color: var(--iw-color-text-primary);
+  }
+  a {
+    color: var(--iw-link);
+  }
+  a:hover {
+    color: var(--iw-link-hover);
+  }
+  :focus-visible {
+    outline: 2px solid var(--iw-focus-ring);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "name": "@integratewise/webhooks",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "build": "echo 'Skipping webhooks build' && exit 0",
+    "deploy": "wrangler deploy",
+    "lint": "eslint src/",
+    "lint:fix": "eslint src/ --fix",
+    "format": "prettier --write src/",
+    "format:check": "prettier --check src/",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist",
+    "webflow:audit": "tsx scripts/webflow-site-audit.ts",
+    "webflow:enhance": "tsx scripts/webflow-enhance-site.ts",
+    "webflow:start": "bash scripts/webflow-quick-start.sh",
+    "webflow:content": "tsx scripts/webflow-content-generator.ts"
+  },
+  "dependencies": {
+    "@integratewise/lib": "workspace:*",
+    "@integratewise/types": "workspace:*",
+    "hono": "^4.6.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241205.0",
+    "tsx": "^4.21.0",
+    "vitest": "^2.1.0",
+    "wrangler": "^4.0.0"
+  }
+}
