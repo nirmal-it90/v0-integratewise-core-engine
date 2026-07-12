@@ -1,5 +1,10 @@
-import { redirect } from "next/navigation"
+import { AppShell } from "@/components/app-shell"
+import { HomeView } from "@/components/views/home-view"
 
 export default function Home() {
-  redirect("/landing")
+  return (
+    <AppShell>
+      <HomeView />
+    </AppShell>
+  )
 }

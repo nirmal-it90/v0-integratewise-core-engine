@@ -1,40 +1,62 @@
 "use client"
 
 import type React from "react"
+
+import { createClient } from "@/lib/supabase/client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState, Suspense } from "react"
+import { useState } from "react"
 import { Layers } from "lucide-react"
-import { useUser } from "@/lib/contexts/user-context"
 
-function SignUpContent() {
+export default function SignUpPage() {
   const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [confirmPassword, setConfirmPassword] = useState("")
   const [fullName, setFullName] = useState("")
-  const [companyName, setCompanyName] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { login } = useUser()
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
+    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
-    if (!email || !fullName || !companyName) {
-      setError("Please fill in all fields")
+    if (password !== confirmPassword) {
+      setError("Passwords do not match")
       setIsLoading(false)
       return
     }
 
-    // Simulate signup and auto-login
-    login(email, fullName)
-    router.push("/onboarding/select")
-    router.refresh()
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters")
+      setIsLoading(false)
+      return
+    }
+
+    try {
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: process.env.NEXT_PUBLIC_DEV_SUPABASE_REDIRECT_URL || `${window.location.origin}/`,
+          data: {
+            full_name: fullName,
+          },
+        },
+      })
+      if (error) throw error
+      router.push("/auth/sign-up-success")
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : "An error occurred")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -49,8 +71,8 @@ function SignUpContent() {
           </div>
           <Card className="border-border/50 shadow-lg">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Create your account</CardTitle>
-              <CardDescription>Start building operational continuity</CardDescription>
+              <CardTitle className="text-2xl">Create an account</CardTitle>
+              <CardDescription>Get started with IntegrateWise OS</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSignUp}>
@@ -68,18 +90,6 @@ function SignUpContent() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="companyName">Company Name</Label>
-                    <Input
-                      id="companyName"
-                      type="text"
-                      placeholder="Your Company Inc."
-                      required
-                      value={companyName}
-                      onChange={(e) => setCompanyName(e.target.value)}
-                      className="h-11"
-                    />
-                  </div>
-                  <div className="grid gap-2">
                     <Label htmlFor="email">Email</Label>
                     <Input
                       id="email"
@@ -91,9 +101,31 @@ function SignUpContent() {
                       className="h-11"
                     />
                   </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="h-11"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="confirmPassword">Confirm Password</Label>
+                    <Input
+                      id="confirmPassword"
+                      type="password"
+                      required
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="h-11"
+                    />
+                  </div>
                   {error && <p className="text-sm text-destructive bg-destructive/10 p-3 rounded-md">{error}</p>}
                   <Button type="submit" className="w-full h-11" disabled={isLoading}>
-                    {isLoading ? "Creating account..." : "Get started"}
+                    {isLoading ? "Creating account..." : "Create account"}
                   </Button>
                 </div>
                 <div className="mt-6 text-center text-sm text-muted-foreground">
@@ -108,13 +140,5 @@ function SignUpContent() {
         </div>
       </div>
     </div>
-  )
-}
-
-export default function SignUpPage() {
-  return (
-    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading...</div>}>
-      <SignUpContent />
-    </Suspense>
   )
 }
