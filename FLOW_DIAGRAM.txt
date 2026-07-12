@@ -1,0 +1,263 @@
+# IntegrateWise OS - Complete User Journey Flow Diagram
+
+## COMPLETE END-TO-END SEQUENCE
+
+┌─────────────────────────────────────────────────────────────────────────────────┐
+│                          🌐 LANDING PAGE (/landing)                             │
+│                                                                                 │
+│               "One click to total continuity"                                   │
+│          [Problem][Continuity][Platform][Solutions][Integrations]              │
+│                                                                                 │
+│               ┌──────────────────┬──────────────────┐                          │
+│               │                  │                  │                          │
+│          [Get Started]      [Sign In]          [Explore]                      │
+└───────────┬──────────────┬────────────────────────────────────────────────────┘
+            │              │
+            ▼              ▼
+    ┌─────────────┐  ┌──────────────┐
+    │  SIGN UP    │  │   LOGIN      │
+    │ (/auth/     │  │  (/auth/     │
+    │  sign-up)   │  │  login)      │
+    │             │  │              │
+    │ Name        │  │ Name         │
+    │ Company     │  │ Email        │
+    │ Email       │  │              │
+    │ [Submit]    │  │ [Continue]   │
+    └──────┬──────┘  └──────┬───────┘
+           │                │
+           └────────┬───────┘
+                    ▼
+      ╔═════════════════════════════════╗
+      ║  USER CONTEXT UPDATED           ║
+      ║  status: 'authenticated'        ║
+      ║  email, fullName saved          ║
+      ║  localStorage persisted         ║
+      ╚═════════════════════════════════╝
+                    │
+                    ▼
+    ┌─────────────────────────────────────┐
+    │   ONBOARDING PROFILE SELECTOR       │
+    │     (/onboarding/select)            │
+    │                                     │
+    │  "Choose your onboarding path"      │
+    │                                     │
+    │  ┌──────────┐ ┌──────────┐ ┌──────┐│
+    │  │ BASIC    │ │STANDARD *│ │COMPRE││
+    │  │2-3 min   │ │5-7 min   │ │15-20 ││
+    │  │Identity  │ │+Workspace│ │FULL  ││
+    │  │only      │ │RECOMMENDED          ││
+    │  └──┬───────┘ └────┬────┘ └────┬───┘│
+    │     │              │           │    │
+    └─────┼──────────────┼───────────┼────┘
+          │              │           │
+          ▼              ▼           ▼
+    ┌────────┐    ┌──────────┐  ┌────────────┐
+    │ BASIC  │    │STANDARD  │  │COMPREHENSIVE
+    │FLOW    │    │FLOW      │  │FLOW
+    │        │    │          │  │
+    │Stage 1:│    │Stage 1:  │  │Stage 1: User Profile
+    │Identity│    │Identity  │  │Stage 2: Workspace
+    │        │    │Stage 2:  │  │Stage 3: Integrations(≥1)
+    │        │    │Workspace │  │Stage 4: Data Scope
+    │        │    │Setup     │  │Stage 5: Memory
+    │        │    │          │  │Stage 6: Governance
+    │        │    │✅ ACTIVE │  │Stage 7: AI Policy
+    │        │    │WORKSPACE │  │Stage 8: Review
+    │        │    │          │  │
+    │        │    │          │  │✅ FULLY
+    │        │    │          │  │CONFIGURED
+    │        │    │          │  │
+    └────┬───┘    └────┬─────┘  └──────┬────┘
+         │             │               │
+         │             │               │
+         │             ▼               ▼
+         │        ╔════════════════════════╗
+         │        ║  ORCHESTRATOR          ║
+         │        ║  (/onboarding)         ║
+         │        ║                        ║
+         │        ║  Progress indicator    ║
+         │        ║  Form state mgmt       ║
+         │        ║  localStorage sync     ║
+         │        ║  Navigation controls   ║
+         │        ╚═════┬──────┬───────┬───╝
+         │              │      │       │
+         │              ▼      ▼       ▼
+         │         [BACK][NEXT][SAVE]
+         │              │      │       │
+         └──────────────┼──────┘       │
+                        │             │
+                        ▼             ▼
+         ┌─────────────────────────────────┐
+         │  COMPLETION & USER CONTEXT      │
+         │                                 │
+         │  useUser().completeOnboarding() │
+         │                                 │
+         │  status: 'completed'            │
+         │  workspaceId: generated         │
+         │  apiKey: generated              │
+         │  localStorage updated           │
+         │                                 │
+         │  Auto-redirect to:              │
+         │  /integrations/manager          │
+         └──────────┬──────────────────────┘
+                    │
+                    ▼
+    ╔═══════════════════════════════════════════════════════════╗
+    ║                  INTEGRATION MANAGER                      ║
+    ║              (/integrations/manager)                      ║
+    ║                                                           ║
+    ║  Browse 8 available connectors:                          ║
+    ║  ✓ Salesforce      ✓ GitHub                             ║
+    ║  ✓ HubSpot         ✓ Zendesk                             ║
+    ║  ✓ Slack           ✓ Notion                              ║
+    ║  ✓ Google Sheets   ✓ Snowflake                          ║
+    ║                                                           ║
+    ║  [Search] [Filter by Category]                           ║
+    ║                                                           ║
+    ║  ┌────────────┐ ┌────────────┐ ┌────────────┐           ║
+    ║  │ Salesforce │ │  HubSpot   │ │   Slack    │ ...       ║
+    ║  │ OAuth / API│ │ API Key    │ │ OAuth      │           ║
+    ║  │ [Connect] │ │ [Connect]  │ │ [Connect] │           ║
+    ║  └────────────┘ └────────────┘ └────────────┘           ║
+    ║                                                           ║
+    ║  [Back] [Next: Configuration] [Go to Dashboard]          ║
+    ╚─────────────────────┬──────────────────────────────────────╝
+                          │
+                          ▼
+    ╔═══════════════════════════════════════════════════════════╗
+    ║                CONFIGURATION MANAGER                      ║
+    ║                 (/configuration)                          ║
+    ║                                                           ║
+    ║  ┌─────────────┬────────────┬───────────┬────────────┐   ║
+    ║  │ Hydration   │ Retention  │ Governance│ AI Policy  │   ║
+    ║  └─────────────┴────────────┴───────────┴────────────┘   ║
+    ║                                                           ║
+    ║  Hydration: [What entities to fetch]                    ║
+    ║  ✓ Accounts ✓ Contacts ✓ Opportunities                 ║
+    ║  ✓ Tickets  ✓ Conversations ✓ Documents                ║
+    ║                                                           ║
+    ║  Retention: [How long to keep data]                     ║
+    ║  ○ Last 30 days ○ Last 90 days ○ Last year             ║
+    ║                                                           ║
+    ║  Governance: [Approval workflows]                        ║
+    ║  ✓ Send customer communication [requires approval]      ║
+    ║  ✓ Update CRM [requires approval]                       ║
+    ║  ✓ Change account health [autonomous]                   ║
+    ║                                                           ║
+    ║  AI Policy: [Model & autonomy]                          ║
+    ║  Model: [Claude 3 Opus v] | Autonomy: [Level 3/5]      ║
+    ║                                                           ║
+    ║  [Save] [Reset] [Go to Dashboard]                        ║
+    ╚─────────────────────┬──────────────────────────────────────╝
+                          │
+                          ▼
+    ╔═══════════════════════════════════════════════════════════╗
+    ║                     DASHBOARD                             ║
+    ║                   (/dashboard)                            ║
+    ║                                                           ║
+    ║  Welcome, John Doe!                                      ║
+    ║  john@example.com                                        ║
+    ║                                                           ║
+    ║  ┌──────────────┬──────────────┬──────────────┐           ║
+    ║  │ Workspace ID │ API Key      │ Status       │           ║
+    ║  │ ws_12345     │ sk_abc123... │ 🟢 Active   │           ║
+    ║  └──────────────┴──────────────┴──────────────┘           ║
+    ║                                                           ║
+    ║  ┌──────────────────────────────────────────────────────┐ ║
+    ║  │ [Overview] [Integrations] [Settings]                 │ ║
+    ║  └──────────────────────────────────────────────────────┘ ║
+    ║                                                           ║
+    ║  Quick Links:                                            ║
+    ║  ⚡ Connect Integrations → /integrations/manager         ║
+    ║  ⚙️  Configure Settings → /configuration                ║
+    ║  🔗 Explore Platform → /integrations                    ║
+    ║                                                           ║
+    ║  [Logout] → Returns to /landing                          ║
+    ║             Clears user_state from localStorage          ║
+    ║             status back to 'unauthenticated'             ║
+    ╚═══════════════════════════════════════════════════════════╝
+
+
+## STATE TRANSITIONS
+
+                    login() / signup()
+                           ↓
+    unauthenticated ──→ authenticated
+                           ↓
+                    startOnboarding()
+                           ↓
+                       onboarding
+                           ↓
+                    completeOnboarding()
+                           ↓
+                       completed ──→ [Full Access] ──→ logout() → unauthenticated
+                           ↓
+                       /dashboard
+                    /integrations/manager
+                    /configuration
+
+
+## ROUTING GUARDS
+
+Route                      Required Status         Action if Not Met
+────────────────────────────────────────────────────────────────────
+/                         Any                     Redirect to /landing
+/landing                  Any                     Always accessible
+/auth/login               Any                     Always accessible
+/auth/sign-up             Any                     Always accessible
+/onboarding/select        authenticated+          Redirect to /landing
+/onboarding               authenticated+          Redirect to /landing
+/dashboard                completed               Redirect to /landing
+/integrations/manager     completed               Redirect to /landing
+/configuration            completed               Redirect to /landing
+
+
+## STORAGE MANAGEMENT
+
+┌─ localStorage Keys ─────────────────┐
+│                                     │
+│ user_state                          │ ← Full context (id, email, status, etc.)
+│   Persists across: page reload      │
+│   Cleared by: logout()              │
+│                                     │
+│ onboarding-basic                    │ ← Basic profile state
+│ onboarding-standard                 │ ← Standard profile state
+│ onboarding-comprehensive            │ ← Comprehensive profile state
+│   Persists across: page reload      │
+│   Allows: Resume interrupted flows  │
+│                                     │
+│ api_key                             │ ← Generated on completion
+│ workspace_config                    │ ← Configuration from onboarding
+│                                     │
+└─────────────────────────────────────┘
+
+
+## PERFORMANCE NOTES
+
+- All operations are synchronous (localStorage)
+- No network calls (frontend-only mock)
+- Suspense boundaries prevent hydration errors
+- useRouter for smooth page transitions
+- useContext for global state access
+- Progress persists if user abandons flow
+
+
+## FEATURES IMPLEMENTED
+
+✅ 3 Progressive onboarding profiles (2-20 min total)
+✅ Auto-login after signup/login
+✅ Workspace auto-activation after Standard flow
+✅ Integration selection with minimum validation (≥1)
+✅ Configuration persistence
+✅ Auto-generated API keys
+✅ User context with localStorage sync
+✅ Logout clears all data
+✅ Smooth navigation with Next.js router
+✅ Mobile-responsive design
+✅ Complete state management
+
+
+═══════════════════════════════════════════════════════════════════════════════
+                          🎉 COMPLETE END-TO-END FLOW
+                         Ready for backend integration!
+═══════════════════════════════════════════════════════════════════════════════
