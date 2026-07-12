@@ -1,12 +1,12 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { OnboardingOrchestrator } from "@/components/onboarding/onboarding-orchestrator";
 import { OnboardingProfile, OnboardingState } from "@/lib/types/onboarding";
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const profileParam = searchParams.get("profile") as OnboardingProfile | null;
   const profile = profileParam || "standard";
 
@@ -15,7 +15,6 @@ export default function OnboardingPage() {
     // Save API key and redirect to dashboard
     localStorage.setItem("api_key", state.apiKey || "");
     localStorage.setItem("workspace_config", JSON.stringify(state));
-    router.push("/dashboard");
   };
 
   return (
@@ -23,5 +22,13 @@ export default function OnboardingPage() {
       profile={profile}
       onComplete={handleComplete}
     />
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div className="flex min-h-screen items-center justify-center">Loading onboarding...</div>}>
+      <OnboardingContent />
+    </Suspense>
   );
 }

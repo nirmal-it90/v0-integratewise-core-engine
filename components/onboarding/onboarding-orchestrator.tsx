@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { OnboardingProfile, OnboardingState, UserProfileData, WorkspaceSetupData } from "@/lib/types/onboarding";
 import { BasicStage } from "./stages/basic-stage";
 import { StandardStage } from "./stages/standard-stage";
@@ -13,6 +14,7 @@ import {
 } from "./stages/comprehensive-stages";
 import { OnboardingProgress } from "./onboarding-progress";
 import { OnboardingCompletionReview } from "./onboarding-completion-review";
+import { useUser } from "@/lib/contexts/user-context";
 
 interface OnboardingOrchestratorProps {
   profile: OnboardingProfile;
@@ -25,6 +27,9 @@ export function OnboardingOrchestrator({
   onComplete,
   initialData,
 }: OnboardingOrchestratorProps) {
+  const router = useRouter();
+  const { completeOnboarding } = useUser();
+
   // Define stages based on profile
   const getStages = (profile: OnboardingProfile): string[] => {
     switch (profile) {
@@ -105,6 +110,13 @@ export function OnboardingOrchestrator({
       };
       setOnboardingState(finalState);
       onComplete(finalState);
+      
+      // Update user context and redirect
+      completeOnboarding();
+      setTimeout(() => {
+        router.push("/integrations/manager");
+        router.refresh();
+      }, 1000);
     }
 
     setIsLoading(false);
