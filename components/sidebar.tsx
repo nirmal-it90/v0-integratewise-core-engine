@@ -40,6 +40,7 @@ import {
   Sparkles,
   Layers,
   GitBranch,
+  Calendar,
 } from "lucide-react"
 import { useState } from "react"
 import { IntegrateWiseLogo } from "@/components/integratewise-logo"
@@ -97,6 +98,7 @@ export function Sidebar({ onSearchClick, onAIClick }: SidebarProps) {
         {renderLink("/architecture", <Layers className="h-4.5 w-4.5 flex-shrink-0" />, "Architecture")}
         {renderLink("/data-flow", <GitBranch className="h-4.5 w-4.5 flex-shrink-0" />, "Data Flow")}
         {renderLink("/strategy", <Compass className="h-4.5 w-4.5 flex-shrink-0" />, "Strategic Hub")}
+        {renderLink("/calendar", <Calendar className="h-4.5 w-4.5 flex-shrink-0" />, "Operating Calendar")}
         {renderLink("/metrics", <BarChart3 className="h-4.5 w-4.5 flex-shrink-0" />, "Metrics Dashboard")}
         {renderLink("/brainstorming", <Lightbulb className="h-4.5 w-4.5 flex-shrink-0" />, "Brainstorming")}
         {renderLink("/website", <Globe className="h-4.5 w-4.5 flex-shrink-0" />, "Website Manager")}
